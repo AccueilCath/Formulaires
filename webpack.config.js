@@ -69,6 +69,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: 'static/index.html'
         }),
-        new Dotenv()
+        new Dotenv({
+            systemvars: true
+        })
     ]
 };
