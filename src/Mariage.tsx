@@ -53,8 +53,8 @@ export const Mariage:React.FC<{}> = () => {
         <Grid item xs={12}>
           <Paper className={classes.paper}>
            <Grid container>
-            <Grid item xs={4}><Typography variant="h5">Mariage de </Typography></Grid>
-            <Grid item xs={4}>
+            <Grid item xs={2}><Typography variant="h5">Mariage de </Typography></Grid>
+            <Grid item xs={5}>
               <TextField
                 required
                 id="mar_lui"
@@ -64,7 +64,7 @@ export const Mariage:React.FC<{}> = () => {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={5}>
               <TextField
                 required
                 id="mar_elle"
