@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 
 const today = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate();
 
-export const Bapteme = () => {
+export const Bapteme: React.FC<{}> = () => {
   const classes = useStyles();
   const [generatePdf, setGeneratePdf] = React.useState(false);
   const [lieu, setLieu] = React.useState('Cathédrale (11h50)');

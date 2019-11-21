@@ -1,6 +1,7 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { keys } from 'ts-transformer-keys';
+import { formatDate } from './utils';
 
 
 // Create styles
@@ -63,10 +64,6 @@ export interface BaptemeProps {
   frere7Age?: string;
   preparation: string;
 }
-
-const formatDate = (inDate: string): string => {
-  return inDate.split('-').reverse().join('/');
-};
 
 export const getBaptemeProps = ():BaptemeProps => {
   const props = {} as BaptemeProps;

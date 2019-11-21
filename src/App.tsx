@@ -1,9 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Bapteme } from "./Bapteme";
+import { Content } from "./Content";
 
 
 ReactDOM.render(
-  <Bapteme  />,
+  <Content  />,
   document.getElementById('FormulairesAccueil')
 );
