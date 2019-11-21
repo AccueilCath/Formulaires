@@ -16,35 +16,10 @@ import Typography from '@material-ui/core/Typography';
 import SendIcon from '@material-ui/icons/Send';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { BaptemePdf, getBaptemeProps, getBaptemeHTML } from './BaptemePdf';
+import { BaptemePdf, getBaptemeProps, getBaptemeEmail } from './BaptemePdf';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { MailTo } from './mailto';
-import { getCCEmail } from './utils';
-
-const useStyles = makeStyles(theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '80%',
-  },
-  formControl: {
-    margin: theme.spacing(3),
-  },
-  table: {
-  },
-  paper: {
-    marginBottom: '1em'
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-}));
-
-const today = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate();
+import { getCCEmail, today, useStyles } from './utils';
 
 export const Bapteme: React.FC<{}> = () => {
   const classes = useStyles();
@@ -70,7 +45,7 @@ export const Bapteme: React.FC<{}> = () => {
             <Grid item xs={12}>
               <TextField
                 required
-                id="dateBapteme"
+                id="bap_dateBapteme"
                 label="Date du Baptême"
                 className={classes.textField}
                 margin="normal"
@@ -89,11 +64,11 @@ export const Bapteme: React.FC<{}> = () => {
                   <FormControlLabel value="Extérieur (lieu ?)" control={<Radio />} label="Extérieur (lieu ?)" />
                 </RadioGroup>
               </FormControl>
-              <input style={{display: 'none'}} id="lieu" value={lieu} readOnly />
+              <input style={{display: 'none'}} id="bap_lieu" value={lieu} readOnly />
             </Grid>
             {lieu == 'Extérieur (lieu ?)' && <Grid item xs={12}>
               <TextField
-                id="lieuExterieur"
+                id="bap_lieuExterieur"
                 label="LieuExterieur"
                 className={classes.textField}
                 margin="normal"
@@ -107,7 +82,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="dateDemande"
+                  id="bap_dateDemande"
                   label="Demande faite le"
                   type="date"
                   className={classes.textField}
@@ -115,13 +90,13 @@ export const Bapteme: React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  defaultValue={today}
+                  defaultValue={today()}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="enregistreur"
+                  id="bap_enregistreur"
                   label="par"
                   className={classes.textField}
                   margin="normal"
@@ -136,7 +111,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="enfant"
+                  id="bap_enfant"
                   label="Nom et prénom(s) de l'enfant"
                   className={classes.textField}
                   margin="normal"
@@ -146,7 +121,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="dateEnfant"
+                  id="bap_dateEnfant"
                   label="Date de naissance"
                   className={classes.textField}
                   margin="normal"
@@ -159,7 +134,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="lieuEnfant"
+                  id="bap_lieuEnfant"
                   label="Lieu de naissance"
                   className={classes.textField}
                   margin="normal"
@@ -168,7 +143,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="pere"
+                  id="bap_pere"
                   label="Prénon du père"
                   className={classes.textField}
                   margin="normal"
@@ -178,7 +153,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="mere"
+                  id="bap_mere"
                   label="Prénom et nom de jeune fille de la mère"
                   className={classes.textField}
                   margin="normal"
@@ -188,7 +163,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="adresseFamille"
+                  id="bap_adresseFamille"
                   label="Adresse de la famille"
                   className={classes.textField}
                   margin="normal"
@@ -198,7 +173,7 @@ export const Bapteme: React.FC<{}> = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="tel"
+                  id="bap_tel"
                   label="N° de téléphone"
                   className={classes.textField}
                   margin="normal"
@@ -207,7 +182,7 @@ export const Bapteme: React.FC<{}> = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="email"
+                  id="bap_email"
                   label="Adresse e-mail"
                   className={classes.textField}
                   margin="normal"
@@ -225,7 +200,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="parrain"
+                  id="bap_parrain"
                   label="Nom et prénom du Parrain"
                   className={classes.textField}
                   margin="normal"
@@ -240,11 +215,11 @@ export const Bapteme: React.FC<{}> = () => {
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="parrainBaptise" value={parrainBaptise} readOnly />
+                <input style={{display: 'none'}} id="bap_parrainBaptise" value={parrainBaptise} readOnly />
               </Grid>
               <Grid item xs={3}>
                 <TextField
-                  id="parrainAge"
+                  id="bap_parrainAge"
                   label="Age"
                   className={classes.textField}
                   margin="normal"
@@ -254,7 +229,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="marraine"
+                  id="bap_marraine"
                   label="Nom et prénom de la Marraine"
                   className={classes.textField}
                   margin="normal"
@@ -269,11 +244,11 @@ export const Bapteme: React.FC<{}> = () => {
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="marraineBaptisee" value={marraineBaptisee} readOnly />
+                <input style={{display: 'none'}} id="bap_marraineBaptisee" value={marraineBaptisee} readOnly />
               </Grid>
               <Grid item xs={3}>
                 <TextField
-                  id="marraineAge"
+                  id="bap_marraineAge"
                   label="Age"
                   className={classes.textField}
                   margin="normal"
@@ -299,14 +274,14 @@ export const Bapteme: React.FC<{}> = () => {
                   <TableRow>
                     <TableCell component="th" scope="row">
                       <TextField
-                        id="frere1"
+                        id="bap_frere1"
                         className={classes.textField}
                         margin="normal"
                       />
                     </TableCell>
                     <TableCell align="right">
                       <TextField
-                        id="frere1Age"
+                        id="bap_frere1Age"
                         className={classes.textField}
                         margin="normal"
                         type="number"
@@ -316,14 +291,14 @@ export const Bapteme: React.FC<{}> = () => {
                   <TableRow>
                     <TableCell component="th" scope="row">
                       <TextField
-                        id="frere2"
+                        id="bap_frere2"
                         className={classes.textField}
                         margin="normal"
                       />
                     </TableCell>
                     <TableCell align="right">
                       <TextField
-                        id="frere2Age"
+                        id="bap_frere2Age"
                         className={classes.textField}
                         margin="normal"
                         type="number"
@@ -333,14 +308,14 @@ export const Bapteme: React.FC<{}> = () => {
                   <TableRow>
                     <TableCell component="th" scope="row">
                       <TextField
-                        id="frere3"
+                        id="bap_frere3"
                         className={classes.textField}
                         margin="normal"
                       />
                     </TableCell>
                     <TableCell align="right">
                       <TextField
-                        id="frere3Age"
+                        id="bap_frere3Age"
                         className={classes.textField}
                         margin="normal"
                         type="number"
@@ -350,14 +325,14 @@ export const Bapteme: React.FC<{}> = () => {
                   <TableRow>
                     <TableCell component="th" scope="row">
                       <TextField
-                        id="frere4"
+                        id="bap_frere4"
                         className={classes.textField}
                         margin="normal"
                       />
                     </TableCell>
                     <TableCell align="right">
                       <TextField
-                        id="frere4Age"
+                        id="bap_frere4Age"
                         className={classes.textField}
                         margin="normal"
                         type="number"
@@ -367,14 +342,14 @@ export const Bapteme: React.FC<{}> = () => {
                   <TableRow>
                     <TableCell component="th" scope="row">
                       <TextField
-                        id="frere5"
+                        id="bap_frere5"
                         className={classes.textField}
                         margin="normal"
                       />
                     </TableCell>
                     <TableCell align="right">
                       <TextField
-                        id="frere5Age"
+                        id="bap_frere5Age"
                         className={classes.textField}
                         margin="normal"
                         type="number"
@@ -384,14 +359,14 @@ export const Bapteme: React.FC<{}> = () => {
                   <TableRow>
                     <TableCell component="th" scope="row">
                       <TextField
-                        id="frere6"
+                        id="bap_frere6"
                         className={classes.textField}
                         margin="normal"
                       />
                     </TableCell>
                     <TableCell align="right">
                       <TextField
-                        id="frere6Age"
+                        id="bap_frere6Age"
                         className={classes.textField}
                         margin="normal"
                         type="number"
@@ -401,14 +376,14 @@ export const Bapteme: React.FC<{}> = () => {
                   <TableRow>
                     <TableCell component="th" scope="row">
                       <TextField
-                        id="frere7"
+                        id="bap_frere7"
                         className={classes.textField}
                         margin="normal"
                       />
                     </TableCell>
                     <TableCell align="right">
                       <TextField
-                        id="frere7Age"
+                        id="bap_frere7Age"
                         className={classes.textField}
                         margin="normal"
                         type="number"
@@ -427,7 +402,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="preparation"
+                  id="bap_preparation"
                   label="Choix de la session de préparation"
                   className={classes.textField}
                   margin="normal"
@@ -445,7 +420,7 @@ export const Bapteme: React.FC<{}> = () => {
             email={process.env.TO_EMAIL||''} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'Bapteme')} 
             subject="Demande de Baptême" 
-            content={() => getBaptemeHTML(getBaptemeProps())} >Email la demande</MailTo>
+            content={() => getBaptemeEmail()} >Email la demande</MailTo>
         </Grid>
       </Grid>
     </form>

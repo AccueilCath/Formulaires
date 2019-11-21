@@ -10,37 +10,11 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { MailTo } from './mailto';
-import { formatDate, getCCEmail } from './utils';
+import { formatDate, getCCEmail, today, useStyles } from './utils';
 import { keys } from 'ts-transformer-keys';
-
-const useStyles = makeStyles(theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '80%',
-  },
-  formControl: {
-    margin: theme.spacing(3),
-  },
-  table: {
-  },
-  paper: {
-    marginBottom: '1em'
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-}));
-
-const today = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate();
 
 export const CertificatBapteme:React.FC<{}> = () => {
   const classes = useStyles();
-  const [generatePdf, setGeneratePdf] = React.useState(false);
   const [motif, setMotif] = React.useState('Communion');
   const changeMotif = (event:React.ChangeEvent<HTMLInputElement>) => setMotif(event.target.value);
   const [livraison, setLivraison] = React.useState('viendra chercher dans une dizaine de jours');
@@ -69,7 +43,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
                   <FormControlLabel value="Divers" control={<Radio />} label="Divers" />
                 </RadioGroup>
               </FormControl>
-              <input style={{display: 'none'}} id="motif" value={motif} readOnly />
+              <input style={{display: 'none'}} id="cba_motif" value={motif} readOnly />
             </Grid>
           </Paper>
         </Grid>
@@ -79,7 +53,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="dateDemande"
+                  id="cba_dateDemande"
                   label="Demande faite le"
                   type="date"
                   className={classes.textField}
@@ -87,13 +61,13 @@ export const CertificatBapteme:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  defaultValue={today}
+                  defaultValue={today()}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="enregistreur"
+                  id="cba_enregistreur"
                   label="par"
                   className={classes.textField}
                   margin="normal"
@@ -108,7 +82,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="nom"
+                  id="cba_nom"
                   label="Nom et prénom"
                   className={classes.textField}
                   margin="normal"
@@ -117,7 +91,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="nomFille"
+                  id="cba_nomFille"
                   label="Nom de Jeune Fille"
                   className={classes.textField}
                   margin="normal"
@@ -127,7 +101,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="mere"
+                  id="cba_mere"
                   label="Nom de jeune fille de la mère"
                   className={classes.textField}
                   margin="normal"
@@ -137,7 +111,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="egliseBapteme"
+                  id="cba_egliseBapteme"
                   label="Eglise du Baptême"
                   className={classes.textField}
                   margin="normal"
@@ -147,7 +121,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="dateBapteme"
+                  id="cba_dateBapteme"
                   label="Date du baptême"
                   className={classes.textField}
                   margin="normal"
@@ -160,7 +134,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="dateNaissance"
+                  id="cba_dateNaissance"
                   label="Date de naissance"
                   className={classes.textField}
                   margin="normal"
@@ -172,7 +146,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="tel"
+                  id="cba_tel"
                   label="N° de téléphone"
                   className={classes.textField}
                   margin="normal"
@@ -181,7 +155,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="email"
+                  id="cba_email"
                   label="Adresse e-mail"
                   className={classes.textField}
                   margin="normal"
@@ -199,11 +173,11 @@ export const CertificatBapteme:React.FC<{}> = () => {
                           <FormControlLabel value="à envoyer :" control={<Radio />} label="à envoyer :" />
                         </RadioGroup>
                       </FormControl>
-                      <input style={{display: 'none'}} id="livraison" value={livraison} readOnly />
+                      <input style={{display: 'none'}} id="cba_livraison" value={livraison} readOnly />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        id="adresseLivraison"
+                        id="cba_adresseLivraison"
                         label="Adresse"
                         className={classes.textField}
                         margin="normal"
@@ -221,7 +195,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
             email={process.env.TO_EMAIL||''} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'CertificatBapteme')} 
             subject="Demande de Certificat de Baptême" 
-            content={() => getCertificatBaptemeHTML()} >Email la demande</MailTo>
+            content={() => getCertificatBaptemeEmail()} >Email la demande</MailTo>
         </Grid>
       </Grid>
     </form>
@@ -244,7 +218,7 @@ interface CertificatBaptemeProps {
   adresseLivraison: string;
 }
 
-const getCertificatBaptemeHTML = ():string => {
+const getCertificatBaptemeEmail = ():string => {
   const props = getCertificatBaptemeProps();
   return `Demande faite le : ${formatDate(props.dateDemande)} par : ${props.enregistreur}
 Motif de la Demande : ${props.motif}
@@ -265,7 +239,7 @@ ${props.livraison} ${props.adresseLivraison}
 const getCertificatBaptemeProps = ():CertificatBaptemeProps => {
   const props = {} as CertificatBaptemeProps;
   keys<CertificatBaptemeProps>().forEach(key => {
-    const elt = document.getElementById(key) as HTMLInputElement;
+    const elt = document.getElementById('cba_' + key) as HTMLInputElement;
     if (elt) {
       props[key] = elt.value;
     }

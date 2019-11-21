@@ -68,7 +68,7 @@ export interface BaptemeProps {
 export const getBaptemeProps = ():BaptemeProps => {
   const props = {} as BaptemeProps;
   keys<BaptemeProps>().forEach(key => {
-    const elt = document.getElementById(key) as HTMLInputElement;
+    const elt = document.getElementById('bap_'+key) as HTMLInputElement;
     if (elt) {
       props[key] = elt.value;
     }
@@ -76,8 +76,9 @@ export const getBaptemeProps = ():BaptemeProps => {
   return props;
 };
 
-export const getBaptemeHTML = (props: BaptemeProps):string => (
-  `Date du Baptême : ${formatDate(props.dateBapteme)}
+export const getBaptemeEmail = ():string => {
+  const props = getBaptemeProps();
+  return `Date du Baptême : ${formatDate(props.dateBapteme)}
 Lieu de célébration : ${props.lieu} ${props.lieuExterieur?props.lieuExterieur:''}
 *******************************************
 Demande faite le : ${formatDate(props.dateDemande)} par : ${props.enregistreur}
@@ -110,7 +111,7 @@ ${props.frere7}: ${props.frere7Age}
 *******************************************
 Choix de la session de préparation : ${props.preparation}
 `
-);
+};
 
 // Create Document Component
 export const BaptemePdf:React.FC<BaptemeProps> = ({  dateBapteme, lieu, lieuExterieur, dateDemande, enregistreur, enfant, dateEnfant, lieuEnfant, pere, mere, adresseFamille, tel, email, parrain, parrainBaptise, parrainAge, marraine, marraineBaptisee, marraineAge, frere1, frere1Age, frere2, frere2Age, frere3, frere3Age, frere4, frere4Age, frere5, frere5Age, frere6, frere6Age, frere7, frere7Age, preparation}) => (

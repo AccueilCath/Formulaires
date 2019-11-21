@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
+import MailIcon from '@material-ui/icons/Mail';
 
 export interface MailToProps {
   email: string;
@@ -32,6 +33,7 @@ export const MailTo:React.FC<MailToProps> = ({email, classement, subject, conten
     component="a"
     variant="contained" 
     color="primary" 
+    endIcon={<MailIcon/>}
     className={classes.button}
     onClick={onClick}>
         {children}

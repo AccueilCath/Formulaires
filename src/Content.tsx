@@ -7,6 +7,8 @@ import Box from '@material-ui/core/Box';
 import { makeStyles, Theme } from '@material-ui/core';
 import { Bapteme } from './Bapteme';
 import { CertificatBapteme } from './CertificatBapteme';
+import { Obseques } from './Obseques';
+import { Mariage } from './Mariage';
 
 interface TabPanelProps {
   index: number;
@@ -58,10 +60,10 @@ export const Content: React.FC<{}> = () => {
         <CertificatBapteme />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Obsèques
+        <Obseques />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Marriage
+        <Mariage />
       </TabPanel>
     </div>
   );
