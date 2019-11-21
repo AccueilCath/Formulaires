@@ -19,6 +19,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { BaptemePdf, getBaptemeProps, getBaptemeHTML } from './BaptemePdf';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { MailTo } from './mailto';
+import { getCCEmail } from './utils';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -440,7 +441,11 @@ export const Bapteme: React.FC<{}> = () => {
             Génère le PDF
           </Button>
           {generatePdf && <PDFDownloadLink document={<BaptemePdf {...getBaptemeProps()} />} fileName="Bapteme.pdf" >Télécharger le PDF Baptême</PDFDownloadLink>}
-          <MailTo email={process.env.TO_EMAIL||''} classement={process.env.CC_EMAIL||''} subject="Demande de Baptême" content={() => getBaptemeHTML(getBaptemeProps())} >Email la demande</MailTo>
+          <MailTo 
+            email={process.env.TO_EMAIL||''} 
+            classement={getCCEmail(process.env.TO_EMAIL||'', 'Bapteme')} 
+            subject="Demande de Baptême" 
+            content={() => getBaptemeHTML(getBaptemeProps())} >Email la demande</MailTo>
         </Grid>
       </Grid>
     </form>

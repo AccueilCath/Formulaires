@@ -1,25 +1,16 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import SendIcon from '@material-ui/icons/Send';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { BaptemePdf, getBaptemeProps, getBaptemeHTML } from './BaptemePdf';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import { MailTo } from './mailto';
-import { formatDate } from './utils';
+import { formatDate, getCCEmail } from './utils';
 import { keys } from 'ts-transformer-keys';
 
 const useStyles = makeStyles(theme => ({
@@ -199,28 +190,38 @@ export const CertificatBapteme:React.FC<{}> = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControl component="fieldset" className={classes.formControl}>
-                  <RadioGroup aria-label="livraison" name="livraison" value={livraison} onChange={changeLivraison} >
-                    <FormControlLabel value="viendra chercher dans une dizaine de jours" control={<Radio />} label="viendra chercher dans une dizaine de jours" />
-                    <FormControlLabel value="à envoyer :" control={<Radio />} label="à envoyer :" />
-                  </RadioGroup>
-                </FormControl>
-                <input style={{display: 'none'}} id="livraison" value={livraison} readOnly />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  id="adresseLivraison"
-                  label="Adresse"
-                  className={classes.textField}
-                  margin="normal"
-                  disabled={livraison !== 'à envoyer :'}
-                />
+                <Paper className={classes.paper}>
+                  <Grid container>
+                    <Grid item xs={12}>
+                      <FormControl component="fieldset" className={classes.formControl}>
+                        <RadioGroup aria-label="livraison" name="livraison" value={livraison} onChange={changeLivraison} >
+                          <FormControlLabel value="viendra chercher dans une dizaine de jours" control={<Radio />} label="viendra chercher dans une dizaine de jours" />
+                          <FormControlLabel value="à envoyer :" control={<Radio />} label="à envoyer :" />
+                        </RadioGroup>
+                      </FormControl>
+                      <input style={{display: 'none'}} id="livraison" value={livraison} readOnly />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="adresseLivraison"
+                        label="Adresse"
+                        className={classes.textField}
+                        margin="normal"
+                        disabled={livraison !== 'à envoyer :'}
+                      />
+                    </Grid>
+                  </Grid>
+                </Paper>
               </Grid>
             </Grid>
           </Paper>
         </Grid>
         <Grid item xs={6}>
-          <MailTo email={process.env.TO_EMAIL||''} classement={process.env.CC_EMAIL||''} subject="Demande de Certificat de Baptême" content={() => getCertificatBaptemeHTML()} >Email la demande</MailTo>
+          <MailTo 
+            email={process.env.TO_EMAIL||''} 
+            classement={getCCEmail(process.env.TO_EMAIL||'', 'CertificatBapteme')} 
+            subject="Demande de Certificat de Baptême" 
+            content={() => getCertificatBaptemeHTML()} >Email la demande</MailTo>
         </Grid>
       </Grid>
     </form>
