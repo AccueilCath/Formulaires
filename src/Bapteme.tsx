@@ -443,7 +443,7 @@ export const Bapteme: React.FC<{}> = () => {
           {generatePdf && <PDFDownloadLink document={<BaptemePdf {...getBaptemeProps()} />} fileName="Bapteme.pdf" >Télécharger le PDF Baptême</PDFDownloadLink>}
           <MailTo 
             email={process.env.TO_EMAIL||''} 
-            classement={getCCEmail(process.env.TO_EMAIL||'', 'Bapteme')} 
+            classement={getCCEmail(process.env.CC_EMAIL||'', 'Bapteme')} 
             subject="Demande de Baptême" 
             content={() => getBaptemeHTML(getBaptemeProps())} >Email la demande</MailTo>
         </Grid>

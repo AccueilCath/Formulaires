@@ -219,7 +219,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
         <Grid item xs={6}>
           <MailTo 
             email={process.env.TO_EMAIL||''} 
-            classement={getCCEmail(process.env.TO_EMAIL||'', 'CertificatBapteme')} 
+            classement={getCCEmail(process.env.CC_EMAIL||'', 'CertificatBapteme')} 
             subject="Demande de Certificat de Baptême" 
             content={() => getCertificatBaptemeHTML()} >Email la demande</MailTo>
         </Grid>
