@@ -50,7 +50,7 @@ export const Content: React.FC<{}> = () => {
           <Tab label="Baptême" />
           <Tab label="Certificat de Baptême"  />
           <Tab label="Obsèques" />
-          <Tab label="Marriage" />
+          <Tab label="Mariage" />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>

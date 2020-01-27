@@ -12,7 +12,9 @@ export const getCCEmail = (email: string, type: string) => {
   return parts.join('@');
 }
 
-export const today = () => new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate();
+const fillNumber =(val:number, len=2, fillChar='0'): string => val.toString().padStart(len, fillChar);
+
+export const today = () => new Date().getFullYear() + '-' + fillNumber(new Date().getMonth() + 1) + '-' + fillNumber(new Date().getDate());
 
 export const useStyles = makeStyles(theme => ({
   container: {

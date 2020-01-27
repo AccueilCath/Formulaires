@@ -8,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
 import { MailTo } from './mailto';
 import { formatDate, getCCEmail, today, useStyles } from './utils';
 import { keys } from 'ts-transformer-keys';
@@ -110,6 +109,7 @@ export const Mariage:React.FC<{}> = () => {
                   label="Demande faite le"
                   className={classes.textField}
                   margin="normal"
+                  type="date"
                   InputLabelProps={{
                     shrink: true,
                   }}
