@@ -55,6 +55,7 @@ export const Bapteme: React.FC<{}> = () => {
                 }}
               />
             </Grid>
+            {/**
             <Grid item xs={12}>
               <FormControl component="fieldset" className={classes.formControl}>
                 <FormLabel component="legend">Lieu de célébration</FormLabel>
@@ -66,14 +67,17 @@ export const Bapteme: React.FC<{}> = () => {
               </FormControl>
               <input style={{display: 'none'}} id="bap_lieu" value={lieu} readOnly />
             </Grid>
-            {lieu == 'Extérieur (lieu ?)' && <Grid item xs={12}>
+             */}
+            {/**
+            lieu == 'Extérieur (lieu ?)' && <Grid item xs={12}>
               <TextField
                 id="bap_lieuExterieur"
                 label="LieuExterieur"
                 className={classes.textField}
                 margin="normal"
               />
-            </Grid>}
+            </Grid>
+            */}
           </Paper>
         </Grid>
         <Grid item xs={12}>
@@ -412,12 +416,15 @@ export const Bapteme: React.FC<{}> = () => {
           </Paper>
         </Grid>
         <Grid item xs={6}>
+          {/**
           <Button variant="contained" color="primary" className={classes.button} endIcon={<SendIcon/>} onClick={() => setGeneratePdf(true)}>
             Génère le PDF
           </Button>
-          {generatePdf && <PDFDownloadLink document={<BaptemePdf {...getBaptemeProps()} />} fileName="Bapteme.pdf" >Télécharger le PDF Baptême</PDFDownloadLink>}
+          */
+          //{generatePdf && <PDFDownloadLink document={<BaptemePdf {...getBaptemeProps()} />} fileName="Bapteme.pdf" >Télécharger le PDF Baptême</PDFDownloadLink>}
+          }
           <MailTo 
-            email={process.env.TO_EMAIL||''} 
+            email={process.env.TO_EMAIL_BAPTEME||process.env.TO_EMAIL||''} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'Bapteme')} 
             subject="Demande de Baptême" 
             content={() => getBaptemeEmail()} >Email la demande</MailTo>

@@ -8,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
 import { MailTo } from './mailto';
 import { formatDate, getCCEmail, today, useStyles } from './utils';
 import { keys } from 'ts-transformer-keys';
@@ -37,7 +36,8 @@ export const CertificatBapteme:React.FC<{}> = () => {
               <FormControl component="fieldset" className={classes.formControl}>
                 <FormLabel component="legend">Motif de la demande :</FormLabel>
                 <RadioGroup aria-label="motif" name="motif" value={motif} onChange={changeMotif} >
-                  <FormControlLabel value="Communion" control={<Radio />} label="Communion" />
+                <FormControlLabel value="Communion" control={<Radio />} label="Communion" />
+                <FormControlLabel value="Confirmation" control={<Radio />} label="Confirmation" />
                   <FormControlLabel value="Parrain, marraine" control={<Radio />} label="Parrain, marraine" />
                   <FormControlLabel value="Entrée en école privée" control={<Radio />} label="Entrée en école privée" />
                   <FormControlLabel value="Divers" control={<Radio />} label="Divers" />
@@ -192,7 +192,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
         </Grid>
         <Grid item xs={6}>
           <MailTo 
-            email={process.env.TO_EMAIL||''} 
+            email={process.env.TO_EMAIL_CERTIFICAT||process.env.TO_EMAIL||''} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'CertificatBapteme')} 
             subject="Demande de Certificat de Baptême" 
             content={() => getCertificatBaptemeEmail()} >Email la demande</MailTo>

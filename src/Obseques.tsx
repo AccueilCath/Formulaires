@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
 import { MailTo } from './mailto';
 import { formatDate, getCCEmail, today, useStyles } from './utils';
 import { keys } from 'ts-transformer-keys';
@@ -296,7 +295,7 @@ export const Obseques:React.FC<{}> = () => {
         </Grid>
         <Grid item xs={6}>
           <MailTo 
-            email={process.env.TO_EMAIL||''} 
+            email={process.env.TO_EMAIL_OBSEQUES||process.env.TO_EMAIL||''} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'Obseques')} 
             subject="Demande d'Obsèques" 
             content={() => getObsequesEmail()} >Email la demande</MailTo>

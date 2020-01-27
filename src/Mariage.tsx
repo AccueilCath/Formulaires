@@ -647,7 +647,7 @@ export const Mariage:React.FC<{}> = () => {
         </Grid>
         <Grid item xs={6}>
           <MailTo 
-            email={process.env.TO_EMAIL||''} 
+            email={process.env.TO_EMAIL_MARIAGE||process.env.TO_EMAIL||''} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'Mariage')} 
             subject="Demande de Mariage" 
             content={() => getMariageEmail()} >Email la demande</MailTo>
