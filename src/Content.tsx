@@ -9,6 +9,7 @@ import { Bapteme } from './Bapteme';
 import { CertificatBapteme } from './CertificatBapteme';
 import { Obseques } from './Obseques';
 import { Mariage } from './Mariage';
+import { DraftsList } from './DraftsList';
 
 interface TabPanelProps {
   index: number;
@@ -45,12 +46,14 @@ export const Content: React.FC<{}> = () => {
 
   return (
     <div className={classes.root}>
+      <input type="hidden" id="timestamp" value={new Date().getTime()} />
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange} aria-label="content tabs">
           <Tab label="Baptême" />
           <Tab label="Certificat de Baptême"  />
           <Tab label="Obsèques" />
           <Tab label="Mariage" />
+          <Tab label="En Attente" />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -64,6 +67,9 @@ export const Content: React.FC<{}> = () => {
       </TabPanel>
       <TabPanel value={value} index={3}>
         <Mariage />
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <DraftsList />
       </TabPanel>
     </div>
   );

@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
 
 export interface BaptemeProps {
   dateBapteme: string;
-  lieu: string;
-  lieuExterieur: string;
+//  lieu: string;
+//  lieuExterieur: string;
   dateDemande: string;
   enregistreur: string;
   enfant: string;
@@ -79,7 +79,6 @@ export const getBaptemeProps = ():BaptemeProps => {
 export const getBaptemeEmail = ():string => {
   const props = getBaptemeProps();
   return `Date du Baptême : ${formatDate(props.dateBapteme)}
-Lieu de célébration : ${props.lieu} ${props.lieuExterieur?props.lieuExterieur:''}
 *******************************************
 Demande faite le : ${formatDate(props.dateDemande)} par : ${props.enregistreur}
 *******************************************
@@ -114,13 +113,13 @@ Choix de la session de préparation : ${props.preparation}
 };
 
 // Create Document Component
-export const BaptemePdf:React.FC<BaptemeProps> = ({  dateBapteme, lieu, lieuExterieur, dateDemande, enregistreur, enfant, dateEnfant, lieuEnfant, pere, mere, adresseFamille, tel, email, parrain, parrainBaptise, parrainAge, marraine, marraineBaptisee, marraineAge, frere1, frere1Age, frere2, frere2Age, frere3, frere3Age, frere4, frere4Age, frere5, frere5Age, frere6, frere6Age, frere7, frere7Age, preparation}) => (
+export const BaptemePdf:React.FC<BaptemeProps> = ({  dateBapteme, dateDemande/*, lieu, lieuExterieur*/, enregistreur, enfant, dateEnfant, lieuEnfant, pere, mere, adresseFamille, tel, email, parrain, parrainBaptise, parrainAge, marraine, marraineBaptisee, marraineAge, frere1, frere1Age, frere2, frere2Age, frere3, frere3Age, frere4, frere4Age, frere5, frere5Age, frere6, frere6Age, frere7, frere7Age, preparation}) => (
   <Document title="Demande de baptême">
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
         <Text style={styles.title}>Demande de Baptême</Text>
         <Text>Date du Baptême : {formatDate(dateBapteme)}</Text>
-        <Text>Lieu de célébration : {lieu} {lieuExterieur}</Text>
+        {/*<Text>Lieu de célébration : {lieu} {lieuExterieur}</Text>*/}
       </View>
       <View style={styles.section}>
         <Text>Demande faite le : {formatDate(dateDemande)} par : {enregistreur}</Text>

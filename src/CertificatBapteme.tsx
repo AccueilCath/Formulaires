@@ -8,9 +8,12 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import DraftsIcon from '@material-ui/icons/Drafts';
 import { MailTo } from './mailto';
 import { formatDate, getCCEmail, today, useStyles } from './utils';
 import { keys } from 'ts-transformer-keys';
+import { saveForm, localStorageAvailable } from './LocalStorage';
+import { Button } from '@material-ui/core';
 
 export const CertificatBapteme:React.FC<{}> = () => {
   const classes = useStyles();
@@ -191,6 +194,11 @@ export const CertificatBapteme:React.FC<{}> = () => {
           </Paper>
         </Grid>
         <Grid item xs={6}>
+        {localStorageAvailable() && 
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DraftsIcon/>} onClick={() => saveForm('Certificat Baptême', getCertificatBaptemeProps())}>
+            Enregistre un brouillon
+          </Button>
+          }
           <MailTo 
             email={process.env.TO_EMAIL_CERTIFICAT||process.env.TO_EMAIL||''} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'CertificatBapteme')} 
@@ -202,7 +210,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
   );
 };
 
-interface CertificatBaptemeProps {
+export interface CertificatBaptemeProps {
   motif: string;
   dateDemande: string;
   enregistreur: string;

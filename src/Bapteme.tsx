@@ -13,19 +13,15 @@ import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import SendIcon from '@material-ui/icons/Send';
+import DraftsIcon from '@material-ui/icons/Drafts';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
-import { BaptemePdf, getBaptemeProps, getBaptemeEmail } from './BaptemePdf';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { getBaptemeEmail, getBaptemeProps } from './BaptemePdf';
 import { MailTo } from './mailto';
 import { getCCEmail, today, useStyles } from './utils';
+import { saveForm, localStorageAvailable } from './LocalStorage';
 
 export const Bapteme: React.FC<{}> = () => {
   const classes = useStyles();
-  const [generatePdf, setGeneratePdf] = React.useState(false);
-  const [lieu, setLieu] = React.useState('Cathédrale (11h50)');
-  const changeLieu = (event:React.ChangeEvent<HTMLInputElement>) => setLieu(event.target.value);
   const [parrainBaptise, setParrainBaptise] = React.useState('oui');
   const changeParrainBaptise = (event:React.ChangeEvent<HTMLInputElement>) => setParrainBaptise(event.target.value);
   const [marraineBaptisee, setMarraineBaptisee] = React.useState('oui');
@@ -416,12 +412,10 @@ export const Bapteme: React.FC<{}> = () => {
           </Paper>
         </Grid>
         <Grid item xs={6}>
-          {/**
-          <Button variant="contained" color="primary" className={classes.button} endIcon={<SendIcon/>} onClick={() => setGeneratePdf(true)}>
-            Génère le PDF
+          {localStorageAvailable() && 
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DraftsIcon/>} onClick={() => saveForm('Baptême', getBaptemeProps())}>
+            Enregistre un brouillon
           </Button>
-          */
-          //{generatePdf && <PDFDownloadLink document={<BaptemePdf {...getBaptemeProps()} />} fileName="Bapteme.pdf" >Télécharger le PDF Baptême</PDFDownloadLink>}
           }
           <MailTo 
             email={process.env.TO_EMAIL_BAPTEME||process.env.TO_EMAIL||''} 
