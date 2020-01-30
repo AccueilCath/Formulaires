@@ -8,12 +8,13 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import DraftsIcon from '@material-ui/icons/Drafts';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { MailTo } from './mailto';
 import { formatDate, getCCEmail, today, useStyles } from './utils';
-import { keys } from 'ts-transformer-keys';
-import { saveForm, localStorageAvailable } from './LocalStorage';
-import { Button } from '@material-ui/core';
+import { saveForm, localStorageAvailable, isSaved, getKey, removeForm } from './LocalStorage';
+import { CERT_BAPTEME_IDX, getCertificatBaptemeProps } from './Props';
 
 export const CertificatBapteme:React.FC<{}> = () => {
   const classes = useStyles();
@@ -21,6 +22,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
   const changeMotif = (event:React.ChangeEvent<HTMLInputElement>) => setMotif(event.target.value);
   const [livraison, setLivraison] = React.useState('viendra chercher dans une dizaine de jours');
   const changeLivraison = (event:React.ChangeEvent<HTMLInputElement>) => setLivraison(event.target.value);
+  const [draftSaved, setDraftSaved] = React.useState(0);
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -38,7 +40,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
             <Grid item xs={12}>
               <FormControl component="fieldset" className={classes.formControl}>
                 <FormLabel component="legend">Motif de la demande :</FormLabel>
-                <RadioGroup aria-label="motif" name="motif" value={motif} onChange={changeMotif} >
+                <RadioGroup aria-label="motif" name="cba_motif" value={motif} onChange={changeMotif} >
                 <FormControlLabel value="Communion" control={<Radio />} label="Communion" />
                 <FormControlLabel value="Confirmation" control={<Radio />} label="Confirmation" />
                   <FormControlLabel value="Parrain, marraine" control={<Radio />} label="Parrain, marraine" />
@@ -171,7 +173,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
                   <Grid container>
                     <Grid item xs={12}>
                       <FormControl component="fieldset" className={classes.formControl}>
-                        <RadioGroup aria-label="livraison" name="livraison" value={livraison} onChange={changeLivraison} >
+                        <RadioGroup aria-label="livraison" name="cba_livraison" value={livraison} onChange={changeLivraison} >
                           <FormControlLabel value="viendra chercher dans une dizaine de jours" control={<Radio />} label="viendra chercher dans une dizaine de jours" />
                           <FormControlLabel value="à envoyer :" control={<Radio />} label="à envoyer :" />
                         </RadioGroup>
@@ -194,9 +196,20 @@ export const CertificatBapteme:React.FC<{}> = () => {
           </Paper>
         </Grid>
         <Grid item xs={6}>
-        {localStorageAvailable() && 
-          <Button variant="contained" color="primary" className={classes.button} endIcon={<DraftsIcon/>} onClick={() => saveForm('Certificat Baptême', getCertificatBaptemeProps())}>
+          {localStorageAvailable() && 
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DraftsIcon/>} onClick={() => {
+            saveForm(CERT_BAPTEME_IDX, getCertificatBaptemeProps());
+            setDraftSaved(draftSaved+1);
+          }}>
             Enregistre un brouillon
+          </Button>
+          }
+          {localStorageAvailable() && isSaved(CERT_BAPTEME_IDX) &&
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DeleteIcon/>} onClick={() => {
+            removeForm(getKey(CERT_BAPTEME_IDX));
+            setDraftSaved(draftSaved+1);
+          }}>
+            Supprime le brouillon
           </Button>
           }
           <MailTo 
@@ -209,22 +222,6 @@ export const CertificatBapteme:React.FC<{}> = () => {
     </form>
   );
 };
-
-export interface CertificatBaptemeProps {
-  motif: string;
-  dateDemande: string;
-  enregistreur: string;
-  nom: string;
-  nomFille: string;
-  mere: string;
-  egliseBapteme: string;
-  dateBapteme: string;
-  dateNaissance: string;
-  tel: string;
-  email: string;
-  livraison: string;
-  adresseLivraison: string;
-}
 
 const getCertificatBaptemeEmail = ():string => {
   const props = getCertificatBaptemeProps();
@@ -242,15 +239,4 @@ Adresse e-mail : ${props.email}
 *******************************************
 ${props.livraison} ${props.adresseLivraison}
 `
-};
-
-const getCertificatBaptemeProps = ():CertificatBaptemeProps => {
-  const props = {} as CertificatBaptemeProps;
-  keys<CertificatBaptemeProps>().forEach(key => {
-    const elt = document.getElementById('cba_' + key) as HTMLInputElement;
-    if (elt) {
-      props[key] = elt.value;
-    }
-  });
-  return props;
 };

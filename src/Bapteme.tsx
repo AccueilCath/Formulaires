@@ -14,18 +14,21 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import DraftsIcon from '@material-ui/icons/Drafts';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
-import { getBaptemeEmail, getBaptemeProps } from './BaptemePdf';
+import { getBaptemeEmail } from './BaptemePdf';
 import { MailTo } from './mailto';
-import { getCCEmail, today, useStyles } from './utils';
-import { saveForm, localStorageAvailable } from './LocalStorage';
+import { getCCEmail, useStyles, today } from './utils';
+import { saveForm, localStorageAvailable, isSaved, removeForm, getKey } from './LocalStorage';
+import { BAPTEME_IDX, BaptemeProps, getBaptemeProps } from './Props';
 
-export const Bapteme: React.FC<{}> = () => {
+export const Bapteme: React.FC<{}> = ({}) => {
   const classes = useStyles();
   const [parrainBaptise, setParrainBaptise] = React.useState('oui');
   const changeParrainBaptise = (event:React.ChangeEvent<HTMLInputElement>) => setParrainBaptise(event.target.value);
   const [marraineBaptisee, setMarraineBaptisee] = React.useState('oui');
   const changeMarraineBaptisee = (event:React.ChangeEvent<HTMLInputElement>) => setMarraineBaptisee(event.target.value);
+  const [draftSaved, setDraftSaved] = React.useState(0);
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -210,7 +213,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Baptisé</FormLabel>
-                  <RadioGroup aria-label="baptisé" name="parrainBaptise" value={parrainBaptise} onChange={changeParrainBaptise} row >
+                  <RadioGroup aria-label="baptisé" name="bap_parrainBaptise" value={parrainBaptise} onChange={changeParrainBaptise} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -239,7 +242,7 @@ export const Bapteme: React.FC<{}> = () => {
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Baptisée</FormLabel>
-                  <RadioGroup aria-label="baptisée" name="marraineBaptisee" value={marraineBaptisee} onChange={changeMarraineBaptisee} row>
+                  <RadioGroup aria-label="baptisée" name="bap_marraineBaptisee" value={marraineBaptisee} onChange={changeMarraineBaptisee} row>
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -413,8 +416,19 @@ export const Bapteme: React.FC<{}> = () => {
         </Grid>
         <Grid item xs={6}>
           {localStorageAvailable() && 
-          <Button variant="contained" color="primary" className={classes.button} endIcon={<DraftsIcon/>} onClick={() => saveForm('Baptême', getBaptemeProps())}>
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DraftsIcon/>} onClick={() => {
+            saveForm(BAPTEME_IDX, getBaptemeProps());
+            setDraftSaved(draftSaved+1);
+          }}>
             Enregistre un brouillon
+          </Button>
+          }
+          {localStorageAvailable() && isSaved(BAPTEME_IDX) &&
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DeleteIcon/>} onClick={() => {
+            removeForm(getKey(BAPTEME_IDX));
+            setDraftSaved(draftSaved+1);
+          }}>
+            Supprime le brouillon
           </Button>
           }
           <MailTo 

@@ -39,3 +39,11 @@ export const useStyles = makeStyles(theme => ({
   },
 }));
 
+export const findFirst = <T>(list:T[], select: (val: T)=>boolean): T|undefined => {
+  for (let idx = 0; idx < list.length; idx++) {
+    if (select(list[idx])) {
+      return list[idx];
+    }
+  }
+  return undefined;
+}

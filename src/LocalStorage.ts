@@ -1,6 +1,7 @@
-export const TYPE_ATTR = 'type';
 export const TIMESTAMP_ATTR = 'timestamp';
-const KEY_PREFIX = 'CATH.';
+
+export const KEY_SEPARATOR = '/';
+const KEY_PREFIX = 'CATH' + KEY_SEPARATOR;
 
 export const localStorageAvailable = () => storageAvailable('localStorage');
 
@@ -29,11 +30,15 @@ const storageAvailable = (type: string):boolean => {
   }
 }
 
-const getKey = (type: string, timestamp: string):string => {
-  return KEY_PREFIX + type + '-' + timestamp;
+export const getFormIdAndTimeStamp = (key: string):{formId: number, timestamp: string} => {
+  const parts = key.split(KEY_SEPARATOR);
+  if (parts.length > 2) {
+    return {formId: parseInt(parts[1]), timestamp: parts[2]};
+  }
+  return {formId: -1, timestamp: ''};
 }
 
-export const saveForm = <T>(type: string, data: T) => {
+export const getKey = (formId: number):string => {
   const elt = document.getElementById('timestamp') as HTMLInputElement;
   let timestamp = '';
   if (elt) {
@@ -41,9 +46,21 @@ export const saveForm = <T>(type: string, data: T) => {
   }
   if (!timestamp) {
     timestamp = '' + new Date().getTime();
-    elt.value = timestamp;
+    elt && (elt.value = timestamp);
   }
-  localStorage.setItem(getKey(type, timestamp), JSON.stringify(data));
+  return KEY_PREFIX + formId + KEY_SEPARATOR + timestamp;
+}
+
+export const isSaved = (formId: number): boolean => {
+  return !!localStorage.getItem(getKey(formId));
+}
+
+export const removeForm = (key: string) => {
+  localStorage.removeItem(key);
+}
+
+export const saveForm = <T>(formId: number, data: T) => {
+  localStorage.setItem(getKey(formId), JSON.stringify(data));
 }
 
 export const loadForm = <T>(key: string): T => {

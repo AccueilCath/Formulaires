@@ -1,7 +1,7 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
-import { keys } from 'ts-transformer-keys';
 import { formatDate } from './utils';
+import { BaptemeProps, getBaptemeProps } from './Props';
 
 
 // Create styles
@@ -27,54 +27,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }
 });
-
-export interface BaptemeProps {
-  dateBapteme: string;
-//  lieu: string;
-//  lieuExterieur: string;
-  dateDemande: string;
-  enregistreur: string;
-  enfant: string;
-  dateEnfant: string;
-  lieuEnfant: string;
-  pere: string;
-  mere: string;
-  adresseFamille: string;
-  tel: string;
-  email: string;
-  parrain: string;
-  parrainBaptise: string;
-  parrainAge: string;
-  marraine: string;
-  marraineBaptisee: string;
-  marraineAge: string;
-  frere1?: string;
-  frere1Age?: string;
-  frere2?: string;
-  frere2Age?: string;
-  frere3?: string;
-  frere3Age?: string;
-  frere4?: string;
-  frere4Age?: string;
-  frere5?: string;
-  frere5Age?: string;
-  frere6?: string;
-  frere6Age?: string;
-  frere7?: string;
-  frere7Age?: string;
-  preparation: string;
-}
-
-export const getBaptemeProps = ():BaptemeProps => {
-  const props = {} as BaptemeProps;
-  keys<BaptemeProps>().forEach(key => {
-    const elt = document.getElementById('bap_'+key) as HTMLInputElement;
-    if (elt) {
-      props[key] = elt.value;
-    }
-  });
-  return props;
-};
 
 export const getBaptemeEmail = ():string => {
   const props = getBaptemeProps();

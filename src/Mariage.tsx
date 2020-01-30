@@ -8,9 +8,13 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { MailTo } from './mailto';
 import { formatDate, getCCEmail, today, useStyles } from './utils';
-import { keys } from 'ts-transformer-keys';
+import { getMariageProps, MARIAGE_IDX } from './Props';
+import { localStorageAvailable, saveForm, isSaved, removeForm, getKey } from './LocalStorage';
 
 export const Mariage:React.FC<{}> = () => {
   const classes = useStyles();
@@ -40,6 +44,7 @@ export const Mariage:React.FC<{}> = () => {
   const changeMarieFiancee = (event:React.ChangeEvent<HTMLInputElement>) => setMarieFiancee(event.target.value);
   const [enfantsFiancee, setEnfantsFiancee] = React.useState('non');
   const changeEnfantsFiancee = (event:React.ChangeEvent<HTMLInputElement>) => setEnfantsFiancee(event.target.value);
+  const [draftSaved, setDraftSaved] = React.useState(0);
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -89,7 +94,7 @@ export const Mariage:React.FC<{}> = () => {
             <Grid item xs={6}>
               <FormControl component="fieldset" className={classes.formControl}>
                 <FormLabel component="legend">Horaire :</FormLabel>
-                <RadioGroup aria-label="horaire souhaité" name="horaire" value={horaire} onChange={changeHoraire} row >
+                <RadioGroup aria-label="horaire souhaité" name="mar_horaire" value={horaire} onChange={changeHoraire} row >
                   <FormControlLabel value="14h30" control={<Radio />} label="14h30" />
                   <FormControlLabel value="16h00" control={<Radio />} label="16h00" />
                 </RadioGroup>
@@ -145,7 +150,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Préparation</FormLabel>
-                  <RadioGroup aria-label="lieu de préparation" name="preparation" value={preparation} onChange={changePreparation} row >
+                  <RadioGroup aria-label="lieu de préparation" name="mar_preparation" value={preparation} onChange={changePreparation} row >
                     <FormControlLabel value="dans la paroisse" control={<Radio />} label="dans la paroisse" />
                     <FormControlLabel value="hors paroisse" control={<Radio />} label="hors paroisse" />
                   </RadioGroup>
@@ -177,7 +182,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Célébration</FormLabel>
-                  <RadioGroup aria-label="Célébration" name="celebration" value={celebration} onChange={changeCelebration} row >
+                  <RadioGroup aria-label="Célébration" name="mar_celebration" value={celebration} onChange={changeCelebration} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -187,7 +192,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Messe</FormLabel>
-                  <RadioGroup aria-label="Messe" name="celebration" value={messe} onChange={changeMesse} row >
+                  <RadioGroup aria-label="Messe" name="mar_messe" value={messe} onChange={changeMesse} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -196,7 +201,7 @@ export const Mariage:React.FC<{}> = () => {
               </Grid>
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
-                  <RadioGroup aria-label="lieu de célébration" name="lieuCelebration" value={lieuCelebration} onChange={changeLieuCelebration} row >
+                  <RadioGroup aria-label="lieu de célébration" name="mar_lieuCelebration" value={lieuCelebration} onChange={changeLieuCelebration} row >
                     <FormControlLabel value="dans la paroisse" control={<Radio />} label="dans la paroisse" />
                     <FormControlLabel value="hors paroisse" control={<Radio />} label="hors paroisse" />
                   </RadioGroup>
@@ -388,7 +393,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">1ère communion</FormLabel>
-                  <RadioGroup aria-label="1ere communion" name="communionFiance" value={communionFiance} onChange={changeCommunionFiance} row >
+                  <RadioGroup aria-label="1ere communion" name="mar_communionFiance" value={communionFiance} onChange={changeCommunionFiance} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -398,7 +403,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Confirmation</FormLabel>
-                  <RadioGroup aria-label="Confirmation" name="confirmationFiance" value={confirmationFiance} onChange={changeConfirmationFiance} row >
+                  <RadioGroup aria-label="Confirmation" name="mar_confirmationFiance" value={confirmationFiance} onChange={changeConfirmationFiance} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -408,7 +413,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Avez vous déjà été marié civilement ?</FormLabel>
-                  <RadioGroup aria-label="marié civilement" name="marieFiance" value={marieFiance} onChange={changeMarieFiance} row >
+                  <RadioGroup aria-label="marié civilement" name="mar_marieFiance" value={marieFiance} onChange={changeMarieFiance} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -418,7 +423,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Avez vous des enfants ?</FormLabel>
-                  <RadioGroup aria-label="des enfants" name="enfantsFiance" value={enfantsFiance} onChange={changeEnfantsFiance} row >
+                  <RadioGroup aria-label="des enfants" name="mar_enfantsFiance" value={enfantsFiance} onChange={changeEnfantsFiance} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -592,7 +597,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">1ère communion</FormLabel>
-                  <RadioGroup aria-label="1ere communion" name="communionFiancee" value={communionFiancee} onChange={changeCommunionFiancee} row >
+                  <RadioGroup aria-label="1ere communion" name="mar_communionFiancee" value={communionFiancee} onChange={changeCommunionFiancee} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -602,7 +607,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Confirmation</FormLabel>
-                  <RadioGroup aria-label="Confirmation" name="confirmationFiancee" value={confirmationFiancee} onChange={changeConfirmationFiancee} row >
+                  <RadioGroup aria-label="Confirmation" name="mar_confirmationFiancee" value={confirmationFiancee} onChange={changeConfirmationFiancee} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -612,7 +617,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Avez vous déjà été mariée civilement ?</FormLabel>
-                  <RadioGroup aria-label="mariée civilement" name="marieFiancee" value={marieFiancee} onChange={changeMarieFiancee} row >
+                  <RadioGroup aria-label="mariée civilement" name="mar_marieFiancee" value={marieFiancee} onChange={changeMarieFiancee} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -622,7 +627,7 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Avez vous des enfants ?</FormLabel>
-                  <RadioGroup aria-label="des enfants" name="enfantsFiancee" value={enfantsFiancee} onChange={changeEnfantsFiancee} row >
+                  <RadioGroup aria-label="des enfants" name="mar_enfantsFiancee" value={enfantsFiancee} onChange={changeEnfantsFiancee} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
@@ -646,6 +651,22 @@ export const Mariage:React.FC<{}> = () => {
           </Paper>
         </Grid>
         <Grid item xs={6}>
+         {localStorageAvailable() && 
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DraftsIcon/>} onClick={() => {
+            saveForm(MARIAGE_IDX, getMariageProps());
+            setDraftSaved(draftSaved+1);
+          }}>
+            Enregistre un brouillon
+          </Button>
+          }
+          {localStorageAvailable() && isSaved(MARIAGE_IDX) &&
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DeleteIcon/>} onClick={() => {
+            removeForm(getKey(MARIAGE_IDX));
+            setDraftSaved(draftSaved+1);
+          }}>
+            Supprime le brouillon
+          </Button>
+          }
           <MailTo 
             email={process.env.TO_EMAIL_MARIAGE||process.env.TO_EMAIL||''} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'Mariage')} 
@@ -656,63 +677,6 @@ export const Mariage:React.FC<{}> = () => {
     </form>
   );
 };
-
-interface MariageProps {
-  lui: string;
-  elle: string;
-  dateSouhaitee: string;
-  horaire: string;
-  dateDemande: string;
-  enregistreur: string;
-  preparationPar: string;
-  preparation: string;
-  horsParoisse: string;
-  horsDiocese: string;
-  celebration: string;
-  messe: string;
-  lieuCelebration: string;
-  egliseCelebration: string;
-  dioceseCelebration: string;
-  celebrant: string;
-  nomFiance: string;
-  prenomFiance: string;
-  pereFiance: string;
-  mereFiance: string;
-  dateNaissanceFiance: string;
-  lieuNaissanceFiance: string;
-  professionFiance: string;
-  domicileFiance: string;
-  domicileFuturFiance: string;
-  telFiance: string;
-  mobileFiance: string;
-  emailFiance: string;
-  dateBaptemeFiance: string;
-  lieuBaptemeFiance: string;
-  communionFiance: string;
-  confirmationFiance: string;
-  marieFiance: string;
-  enfantsFiance: string;
-  nbEnfantsFiance: string;
-  nomFiancee: string;
-  prenomFiancee: string;
-  pereFiancee: string;
-  mereFiancee: string;
-  dateNaissanceFiancee: string;
-  lieuNaissanceFiancee: string;
-  professionFiancee: string;
-  domicileFiancee: string;
-  domicileFuturFiancee: string;
-  telFiancee: string;
-  mobileFiancee: string;
-  emailFiancee: string;
-  dateBaptemeFiancee: string;
-  lieuBaptemeFiancee: string;
-  communionFiancee: string;
-  confirmationFiancee: string;
-  marieFiancee: string;
-  enfantsFiancee: string;
-  nbEnfantsFiancee: string;
-}
 
 const getMariageEmail = ():string => {
   const props = getMariageProps();
@@ -755,15 +719,4 @@ Mariée civilement : ${props.marieFiancee}
 Nb Enfants : ${(props.enfantsFiancee !== 'non') ? props.nbEnfantsFiancee:'0'}
 
 `
-};
-
-const getMariageProps = ():MariageProps => {
-  const props = {} as MariageProps;
-  keys<MariageProps>().forEach(key => {
-    const elt = document.getElementById('mar_' + key) as HTMLInputElement;
-    if (elt) {
-      props[key] = elt.value;
-    }
-  });
-  return props;
 };
