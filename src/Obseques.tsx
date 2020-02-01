@@ -10,9 +10,10 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import { MailTo } from './mailto';
-import { formatDate, getCCEmail, today, useStyles, findFirst } from './utils';
+import { formatDate, getCCEmail, today, useStyles, findFirst, setInputValue } from './utils';
 import { getObsequesProps, OBSEQUES_IDX, LISTE_CELEBRANTS } from './Props';
 import { localStorageAvailable, saveForm, isSaved, getKey, removeForm } from './LocalStorage';
 
@@ -23,14 +24,18 @@ export const Obseques:React.FC<{}> = () => {
   const [typeRite, setTypeRite] = React.useState('Inhumation');
   const changeTypeRite = (event:React.ChangeEvent<HTMLInputElement>) => setTypeRite(event.target.value);
   const [draftSaved, setDraftSaved] = React.useState(0);
-  const [celebrantEmail, setCelebrantEmail] = React.useState('');
-  const changeCelebrant = (event: object, value: string, reason: string) => {
-    const celeb = findFirst(LISTE_CELEBRANTS, val => value == val.nom);
+  const onCelebrantChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const celeb = findFirst(LISTE_CELEBRANTS, val => event.currentTarget?.value == val.nom);
     if (celeb) {
-      setCelebrantEmail('"' + celeb.nom + '" <' + celeb.email + '>');
+      setInputValue('obs_emailCelebrant', '"' + celeb.nom + '" <' + celeb.email + '>');
     } else {
-      setCelebrantEmail('');
+      setInputValue('obs_emailCelebrant', '');
     }
+  }
+  const handleChange = (event: React.ChangeEvent<{name?:string|undefined, value: unknown}>) => {
+    const celeb = event.target.value as string[];
+    setInputValue('obs_celebrant', celeb[0]);
+    setInputValue('obs_emailCelebrant', '"' + celeb[0] + '" <' + celeb[1] + '>');
   };
 
   return (
@@ -46,7 +51,7 @@ export const Obseques:React.FC<{}> = () => {
             <Grid item xs={12}><Typography>Renseignements à recueillir auprès des Pompes Funèbres</Typography></Grid>
             <Grid item xs={12}>
               <FormControl component="fieldset" className={classes.formControl}>
-                <RadioGroup aria-label="type de Celebration" name="obs_typeCelebration" value={typeCelebration} onChange={changeTypeCelebration} row >
+                <RadioGroup aria-label="type de Celebration" name="obs_typeCelebration" defaultValue="Messe" onChange={changeTypeCelebration} row >
                   <FormControlLabel value="Messe" control={<Radio />} label="Messe" />
                   <FormControlLabel value="Bénédiction" control={<Radio />} label="Bénédiction" />
                 </RadioGroup>
@@ -54,7 +59,7 @@ export const Obseques:React.FC<{}> = () => {
               <input style={{display: 'none'}} id="obs_typeCelebration" value={typeCelebration} readOnly />
             </Grid>
             <Grid item xs={12}>
-              {/*
+              {/* */}
               <TextField
                 required
                 id="obs_celebrant"
@@ -62,18 +67,13 @@ export const Obseques:React.FC<{}> = () => {
                 className={classes.textField}
                 margin="normal"
                 fullWidth
+                onChange={onCelebrantChange}
+                defaultValue=" "
               />
-              */}
-              <Autocomplete
-                id="obs_celebrant"
-                freeSolo
-                options={LISTE_CELEBRANTS.map(celeb => celeb.nom)}
-                onInputChange={changeCelebrant}
-                renderInput={params => (
-                  <TextField {...params} label="Célébrant" margin="normal" className={classes.textField} required fullWidth />
-                )}
-              />
-              <input style={{display: 'none'}} id="obs_emailCelebrant" value={celebrantEmail} readOnly />
+              <Select value="" onChange={handleChange} >
+                {LISTE_CELEBRANTS.map(celeb => <MenuItem key={celeb.nom} value={[celeb.nom, celeb.email]}>{celeb.nom}</MenuItem>)}
+              </Select>
+              <input type="hidden" id="obs_emailCelebrant" />
             </Grid>
             <Grid item xs={6}>
               <TextField

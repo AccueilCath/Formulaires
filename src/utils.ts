@@ -47,3 +47,10 @@ export const findFirst = <T>(list:T[], select: (val: T)=>boolean): T|undefined =
   }
   return undefined;
 }
+
+export const setInputValue = (id: string, value: string) => {
+  const elt = document.getElementById(id) as HTMLInputElement;
+    if (elt) {
+      elt.value = value;
+    }
+}

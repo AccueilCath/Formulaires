@@ -10,6 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import { BaptemeProps, CertificatBaptemeProps, FORM_LIBS, BAPTEME_IDX, CERT_BAPTEME_IDX, OBSEQUES_IDX, ObsequesProps, FormulaireProps, MARIAGE_IDX, MariageProps } from './Props';
 import { listFormKeys, loadForm, KEY_SEPARATOR, removeForm } from './LocalStorage';
+import { setInputValue } from './utils';
 
 const getDetail = (val:string):string => {
   const parts = val.split(KEY_SEPARATOR);
@@ -25,10 +26,7 @@ const getDetail = (val:string):string => {
 const getData = (val: string): FormulaireProps => {
   const parts = val.split(KEY_SEPARATOR);
   if (parts.length > 2) {
-    const elt = document.getElementById('timestamp') as HTMLInputElement;
-    if (elt) {
-      elt.value = parts[2];
-    }
+    setInputValue('timestamp', parts[2]);
     switch (parseInt(parts[1])) {
       case BAPTEME_IDX:
         return loadForm<BaptemeProps>(val);

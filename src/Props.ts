@@ -246,6 +246,8 @@ const selectRadioButton = (name: string, value: string) => {
     rbs.forEach(rb => {
       if ((rb as HTMLInputElement).value == value) {
         (rb as HTMLInputElement).checked = true;
+      } else {
+        (rb as HTMLInputElement).checked = false;
       }
     });
   }
