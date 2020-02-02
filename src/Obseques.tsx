@@ -12,8 +12,8 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { MailTo } from './mailto';
-import { formatDate, getCCEmail, today, useStyles, findFirst, setInputValue, getToEmail } from './utils';
-import { OBSEQUES_IDX, LISTE_CELEBRANTS, ObsequesProps } from './Props';
+import { formatDate, getCCEmail, today, useStyles, findFirst, setInputValue, getToEmail, getCelebrants } from './utils';
+import { OBSEQUES_IDX, ObsequesProps } from './Props';
 import { localStorageAvailable, saveForm, isSaved, getKey, removeForm } from './LocalStorage';
 
 export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
@@ -97,11 +97,11 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
                 id="free-solo-demo"
                 freeSolo
                 value={celebrant}
-                options={LISTE_CELEBRANTS.map(celeb => celeb.nom)}
+                options={getCelebrants().map(celeb => celeb.nom)}
                 onInputChange={(event: object, value: string, reason: string) => {
                   setcelebrant(value);
                   if (reason == 'reset') {
-                    const celeb = findFirst(LISTE_CELEBRANTS, val => val.nom == value);
+                    const celeb = findFirst(getCelebrants(), val => val.nom == value);
                     if (celeb) {
                       setemailCelebrant(celeb.email);
                     }

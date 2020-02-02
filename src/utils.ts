@@ -7,7 +7,6 @@ export const formatDate = (inDate: string): string => {
   return inDate.split('-').reverse().join('/');
 };
 
-
 export const getToEmail = (emailBase: string, ...emailsAndNames: string[]) => {
   const emails: string[] = []
   if (emailBase) {
@@ -77,3 +76,23 @@ export const setInputValue = (id: string, value: string) => {
       elt.value = value;
     }
 }
+
+const LISTE_CELEBRANTS:Array<{nom: string, email: string}> = [];/*[
+  {nom: 'Père Appolinaire Ika', email: 'goappolinaire@yahoo.fr'},
+  {nom: 'Père David Maria-Susaï', email: 'daraaj86@gmail.com'},
+  {nom: 'André Degorces', email: 'andre.degorces@wanadoo.fr'}, 
+  {nom: 'Père Luca Astolfi', email: 'luca91.astolfi@gmail.com'},
+  {nom: 'Père Bertrand Monnard', email: 'b.monnard17@gmail.com'},
+  {nom: 'Père Laurent Chaumet', email: 'perechaumet@gmail.com'}
+];*/
+
+export const getCelebrants = ():Array<{nom: string, email: string}> => {
+  if (!LISTE_CELEBRANTS.length) {
+    (process.env.LISTE_CELEBRANTS || '').split(';').forEach(celeb => {
+      const parts = celeb.trim().split(/[\""<>]/);
+      LISTE_CELEBRANTS.push({nom: findFirst(parts, part => !!part)||'', email:findFirst(parts.reverse(), part => !!part)||''})
+    });
+  }
+  return LISTE_CELEBRANTS;
+}
+

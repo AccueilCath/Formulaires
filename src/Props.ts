@@ -148,15 +148,6 @@ export interface MariageProps {
 
 export type FormulaireProps = BaptemeProps|CertificatBaptemeProps|ObsequesProps|MariageProps|undefined;
 
-export const LISTE_CELEBRANTS:Array<{nom: string, email: string}> = [
-  {nom: 'Père Appolinaire Ika', email: 'goappolinaire@yahoo.fr'},
-  {nom: 'Père David Maria-Susaï', email: 'daraaj86@gmail.com'},
-  {nom: 'André Degorces', email: 'andre.degorces@wanadoo.fr'}, 
-  {nom: 'Père Luca Astolfi', email: 'luca91.astolfi@gmail.com'},
-  {nom: 'Père Bertrand Monnard', email: 'b.monnard17@gmail.com'},
-  {nom: 'Père Laurent Chaumet', email: 'perechaumet@gmail.com'}
-];
-
 export const getCachedData = (val: string): FormulaireProps => {
   const parts = val.split(KEY_SEPARATOR);
   if (parts.length > 2) {
