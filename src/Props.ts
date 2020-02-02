@@ -149,11 +149,11 @@ export interface MariageProps {
 export type FormulaireProps = BaptemeProps|CertificatBaptemeProps|ObsequesProps|MariageProps|undefined;
 
 export const LISTE_CELEBRANTS:Array<{nom: string, email: string}> = [
-  {nom: 'Appolinaire Ika', email: 'goappolinaire@yahoo.fr'},
-  {nom: 'David Maria-Susaï', email: 'daraaj86@gmail.com'},
+  {nom: 'Père Appolinaire Ika', email: 'goappolinaire@yahoo.fr'},
+  {nom: 'Père David Maria-Susaï', email: 'daraaj86@gmail.com'},
   {nom: 'André Degorces', email: 'andre.degorces@wanadoo.fr'}, 
-  {nom: 'Luca Astolfi', email: 'luca91.astolfi@gmail.com'},
-  {nom: 'Bertrand Monnard', email: 'b.monnard17@gmail.com'},
+  {nom: 'Père Luca Astolfi', email: 'luca91.astolfi@gmail.com'},
+  {nom: 'Père Bertrand Monnard', email: 'b.monnard17@gmail.com'},
   {nom: 'Père Laurent Chaumet', email: 'perechaumet@gmail.com'}
 ];
 
