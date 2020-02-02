@@ -8,39 +8,128 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { MailTo } from './mailto';
 import { formatDate, getCCEmail, today, useStyles } from './utils';
-import { keys } from 'ts-transformer-keys';
+import { MARIAGE_IDX, MariageProps } from './Props';
+import { localStorageAvailable, saveForm, isSaved, removeForm, getKey } from './LocalStorage';
 
-export const Mariage:React.FC<{}> = () => {
+export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
   const classes = useStyles();
-  const [horaire, setHoraire] = React.useState('14h30');
-  const changeHoraire = (event:React.ChangeEvent<HTMLInputElement>) => setHoraire(event.target.value);
-  const [preparation, setPreparation] = React.useState('dans la paroisse');
-  const changePreparation = (event:React.ChangeEvent<HTMLInputElement>) => setPreparation(event.target.value);
-  const [celebration, setCelebration] = React.useState('oui');
-  const changeCelebration = (event:React.ChangeEvent<HTMLInputElement>) => setCelebration(event.target.value);
-  const [messe, setMesse] = React.useState('oui');
-  const changeMesse = (event:React.ChangeEvent<HTMLInputElement>) => setMesse(event.target.value);
-  const [lieuCelebration, setLieuCelebration] = React.useState('dans la paroisse');
-  const changeLieuCelebration = (event:React.ChangeEvent<HTMLInputElement>) => setLieuCelebration(event.target.value);
-  const [communionFiance, setCommunionFiance] = React.useState('oui');
-  const changeCommunionFiance = (event:React.ChangeEvent<HTMLInputElement>) => setCommunionFiance(event.target.value);
-  const [confirmationFiance, setConfirmationFiance] = React.useState('oui');
-  const changeConfirmationFiance = (event:React.ChangeEvent<HTMLInputElement>) => setConfirmationFiance(event.target.value);
-  const [marieFiance, setMarieFiance] = React.useState('non');
-  const changeMarieFiance = (event:React.ChangeEvent<HTMLInputElement>) => setMarieFiance(event.target.value);
-  const [enfantsFiance, setEnfantsFiance] = React.useState('non');
-  const changeEnfantsFiance = (event:React.ChangeEvent<HTMLInputElement>) => setEnfantsFiance(event.target.value);
-  const [communionFiancee, setCommunionFiancee] = React.useState('oui');
-  const changeCommunionFiancee = (event:React.ChangeEvent<HTMLInputElement>) => setCommunionFiancee(event.target.value);
-  const [confirmationFiancee, setConfirmationFiancee] = React.useState('oui');
-  const changeConfirmationFiancee = (event:React.ChangeEvent<HTMLInputElement>) => setConfirmationFiancee(event.target.value);
-  const [marieFiancee, setMarieFiancee] = React.useState('non');
-  const changeMarieFiancee = (event:React.ChangeEvent<HTMLInputElement>) => setMarieFiancee(event.target.value);
-  const [enfantsFiancee, setEnfantsFiancee] = React.useState('non');
-  const changeEnfantsFiancee = (event:React.ChangeEvent<HTMLInputElement>) => setEnfantsFiancee(event.target.value);
+  const [draftSaved, setDraftSaved] = React.useState(0);
 
+  const [lui, setlui] = React.useState(data?data.lui:'');
+  const [elle, setelle] = React.useState(data?data.elle:'');
+  const [dateSouhaitee, setdateSouhaitee] = React.useState(data?data.dateSouhaitee:'');
+  const [horaire, sethoraire] = React.useState(data?data.horaire:'14h30');
+  const [dateDemande, setdateDemande] = React.useState(data?data.dateDemande:'');
+  const [enregistreur, setenregistreur] = React.useState(data?data.enregistreur:'');
+  const [preparationPar, setpreparationPar] = React.useState(data?data.preparationPar:'');
+  const [preparation, setpreparation] = React.useState(data?data.preparation:'dans la paroisse');
+  const [horsParoisse, sethorsParoisse] = React.useState(data?data.horsParoisse:'');
+  const [horsDiocese, sethorsDiocese] = React.useState(data?data.horsDiocese:'');
+  const [celebration, setcelebration] = React.useState(data?data.celebration:'oui');
+  const [messe, setmesse] = React.useState(data?data.messe:'oui');
+  const [lieuCelebration, setlieuCelebration] = React.useState(data?data.lieuCelebration:'dans la paroisse');
+  const [egliseCelebration, setegliseCelebration] = React.useState(data?data.egliseCelebration:'');
+  const [dioceseCelebration, setdioceseCelebration] = React.useState(data?data.dioceseCelebration:'');
+  const [celebrant, setcelebrant] = React.useState(data?data.celebrant:'');
+  const [nomFiance, setnomFiance] = React.useState(data?data.nomFiance:'');
+  const [prenomFiance, setprenomFiance] = React.useState(data?data.prenomFiance:'');
+  const [pereFiance, setpereFiance] = React.useState(data?data.pereFiance:'');
+  const [mereFiance, setmereFiance] = React.useState(data?data.mereFiance:'');
+  const [dateNaissanceFiance, setdateNaissanceFiance] = React.useState(data?data.dateNaissanceFiance:'');
+  const [lieuNaissanceFiance, setlieuNaissanceFiance] = React.useState(data?data.lieuNaissanceFiance:'');
+  const [professionFiance, setprofessionFiance] = React.useState(data?data.professionFiance:'');
+  const [domicileFiance, setdomicileFiance] = React.useState(data?data.domicileFiance:'');
+  const [domicileFuturFiance, setdomicileFuturFiance] = React.useState(data?data.domicileFuturFiance:'');
+  const [telFiance, settelFiance] = React.useState(data?data.telFiance:'');
+  const [mobileFiance, setmobileFiance] = React.useState(data?data.mobileFiance:'');
+  const [emailFiance, setemailFiance] = React.useState(data?data.emailFiance:'');
+  const [dateBaptemeFiance, setdateBaptemeFiance] = React.useState(data?data.dateBaptemeFiance:'');
+  const [lieuBaptemeFiance, setlieuBaptemeFiance] = React.useState(data?data.lieuBaptemeFiance:'');
+  const [communionFiance, setcommunionFiance] = React.useState(data?data.communionFiance:'oui');
+  const [confirmationFiance, setconfirmationFiance] = React.useState(data?data.confirmationFiance:'oui');
+  const [marieFiance, setmarieFiance] = React.useState(data?data.marieFiance:'non');
+  const [enfantsFiance, setenfantsFiance] = React.useState(data?data.enfantsFiance:'non');
+  const [nbEnfantsFiance, setnbEnfantsFiance] = React.useState(data?data.nbEnfantsFiance:'1');
+  const [nomFiancee, setnomFiancee] = React.useState(data?data.nomFiancee:'');
+  const [prenomFiancee, setprenomFiancee] = React.useState(data?data.prenomFiancee:'');
+  const [pereFiancee, setpereFiancee] = React.useState(data?data.pereFiancee:'');
+  const [mereFiancee, setmereFiancee] = React.useState(data?data.mereFiancee:'');
+  const [dateNaissanceFiancee, setdateNaissanceFiancee] = React.useState(data?data.dateNaissanceFiancee:'');
+  const [lieuNaissanceFiancee, setlieuNaissanceFiancee] = React.useState(data?data.lieuNaissanceFiancee:'');
+  const [professionFiancee, setprofessionFiancee] = React.useState(data?data.professionFiancee:'');
+  const [domicileFiancee, setdomicileFiancee] = React.useState(data?data.domicileFiancee:'');
+  const [domicileFuturFiancee, setdomicileFuturFiancee] = React.useState(data?data.domicileFuturFiancee:'');
+  const [telFiancee, settelFiancee] = React.useState(data?data.telFiancee:'');
+  const [mobileFiancee, setmobileFiancee] = React.useState(data?data.mobileFiancee:'');
+  const [emailFiancee, setemailFiancee] = React.useState(data?data.emailFiancee:'');
+  const [dateBaptemeFiancee, setdateBaptemeFiancee] = React.useState(data?data.dateBaptemeFiancee:'');
+  const [lieuBaptemeFiancee, setlieuBaptemeFiancee] = React.useState(data?data.lieuBaptemeFiancee:'');
+  const [communionFiancee, setcommunionFiancee] = React.useState(data?data.communionFiancee:'oui');
+  const [confirmationFiancee, setconfirmationFiancee] = React.useState(data?data.confirmationFiancee:'oui');
+  const [marieFiancee, setmarieFiancee] = React.useState(data?data.marieFiancee:'non');
+  const [enfantsFiancee, setenfantsFiancee] = React.useState(data?data.enfantsFiancee:'non');
+  const [nbEnfantsFiancee, setnbEnfantsFiancee] = React.useState(data?data.nbEnfantsFiancee:'1');
+  const getProps = () => ({
+    lui,
+    elle,
+    dateSouhaitee,
+    horaire,
+    dateDemande,
+    enregistreur,
+    preparationPar,
+    preparation,
+    horsParoisse,
+    horsDiocese,
+    celebration,
+    messe,
+    lieuCelebration,
+    egliseCelebration,
+    dioceseCelebration,
+    celebrant,
+    nomFiance,
+    prenomFiance,
+    pereFiance,
+    mereFiance,
+    dateNaissanceFiance,
+    lieuNaissanceFiance,
+    professionFiance,
+    domicileFiance,
+    domicileFuturFiance,
+    telFiance,
+    mobileFiance,
+    emailFiance,
+    dateBaptemeFiance,
+    lieuBaptemeFiance,
+    communionFiance,
+    confirmationFiance,
+    marieFiance,
+    enfantsFiance,
+    nbEnfantsFiance,
+    nomFiancee,
+    prenomFiancee,
+    pereFiancee,
+    mereFiancee,
+    dateNaissanceFiancee,
+    lieuNaissanceFiancee,
+    professionFiancee,
+    domicileFiancee,
+    domicileFuturFiancee,
+    telFiancee,
+    mobileFiancee,
+    emailFiancee,
+    dateBaptemeFiancee,
+    lieuBaptemeFiancee,
+    communionFiancee,
+    confirmationFiancee,
+    marieFiancee,
+    enfantsFiancee,
+    nbEnfantsFiancee
+  });
   return (
     <form className={classes.container} noValidate autoComplete="off">
       <Grid
@@ -56,27 +145,26 @@ export const Mariage:React.FC<{}> = () => {
             <Grid item xs={5}>
               <TextField
                 required
-                id="mar_lui"
                 label="lui"
                 className={classes.textField}
                 margin="normal"
                 fullWidth
+                value={lui} onChange={(e:any)=>setlui(e.target.value)}
               />
             </Grid>
             <Grid item xs={5}>
               <TextField
                 required
-                id="mar_elle"
                 label="elle"
                 className={classes.textField}
                 margin="normal"
                 fullWidth
+                value={elle} onChange={(e:any)=>setelle(e.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
               <TextField
                 required
-                id="mar_dateSouhaitee"
                 label="Date souhaitée"
                 type="date"
                 className={classes.textField}
@@ -84,17 +172,17 @@ export const Mariage:React.FC<{}> = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                value={dateSouhaitee} onChange={(e:any)=>setdateSouhaitee(e.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
               <FormControl component="fieldset" className={classes.formControl}>
                 <FormLabel component="legend">Horaire :</FormLabel>
-                <RadioGroup aria-label="horaire souhaité" name="horaire" value={horaire} onChange={changeHoraire} row >
+                <RadioGroup aria-label="horaire souhaité" value={horaire} onChange={(e:any)=>sethoraire(e.target.value)} row >
                   <FormControlLabel value="14h30" control={<Radio />} label="14h30" />
                   <FormControlLabel value="16h00" control={<Radio />} label="16h00" />
                 </RadioGroup>
               </FormControl>
-              <input style={{display: 'none'}} id="mar_horaire" value={horaire} readOnly />
             </Grid>
            </Grid>
           </Paper>
@@ -105,7 +193,6 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_dateDemande"
                   label="Demande faite le"
                   className={classes.textField}
                   margin="normal"
@@ -113,17 +200,17 @@ export const Mariage:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  defaultValue={today()}
+                  value={dateDemande} onChange={(e:any)=>setdateDemande(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_enregistreur"
                   label="par"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={enregistreur} onChange={(e:any)=>setenregistreur(e.target.value)}
                 />
               </Grid>
             </Grid>
@@ -135,41 +222,40 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="mar_preparationPar"
                   label="Préparation par le Père"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={preparationPar} onChange={(e:any)=>setpreparationPar(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Préparation</FormLabel>
-                  <RadioGroup aria-label="lieu de préparation" name="preparation" value={preparation} onChange={changePreparation} row >
+                  <RadioGroup aria-label="lieu de préparation" value={preparation} onChange={(e:any)=>setpreparation(e.target.value)} row >
                     <FormControlLabel value="dans la paroisse" control={<Radio />} label="dans la paroisse" />
                     <FormControlLabel value="hors paroisse" control={<Radio />} label="hors paroisse" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_preparation" value={preparation} readOnly />
               </Grid>
               {preparation !== 'dans la paroisse' &&
               <>
                 <Grid item xs={6}>
                   <TextField
-                    id="mar_horsParoisse"
                     label="Paroisse de"
                     className={classes.textField}
                     margin="normal"
                     fullWidth
+                    value={horsParoisse} onChange={(e:any)=>sethorsParoisse(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
-                    id="mar_horsDiocese"
                     label="Diocèse"
                     className={classes.textField}
                     margin="normal"
                     fullWidth
+                    value={horsDiocese} onChange={(e:any)=>sethorsDiocese(e.target.value)}
                   />
                 </Grid>
               </>
@@ -177,61 +263,58 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Célébration</FormLabel>
-                  <RadioGroup aria-label="Célébration" name="celebration" value={celebration} onChange={changeCelebration} row >
+                  <RadioGroup aria-label="Célébration" value={celebration} onChange={(e:any)=>setcelebration(e.target.value)} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_celebration" value={celebration} readOnly />
               </Grid>
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Messe</FormLabel>
-                  <RadioGroup aria-label="Messe" name="celebration" value={messe} onChange={changeMesse} row >
+                  <RadioGroup aria-label="Messe" value={messe} onChange={(e:any)=>setmesse(e.target.value)} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_messe" value={messe} readOnly />
               </Grid>
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
-                  <RadioGroup aria-label="lieu de célébration" name="lieuCelebration" value={lieuCelebration} onChange={changeLieuCelebration} row >
+                  <RadioGroup aria-label="lieu de célébration" value={lieuCelebration} onChange={(e:any)=>setlieuCelebration(e.target.value)} row >
                     <FormControlLabel value="dans la paroisse" control={<Radio />} label="dans la paroisse" />
                     <FormControlLabel value="hors paroisse" control={<Radio />} label="hors paroisse" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_lieuCelebration" value={lieuCelebration} readOnly />
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  id="mar_egliseCelebration"
                   label="Eglise"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={egliseCelebration} onChange={(e:any)=>setegliseCelebration(e.target.value)}
                 />
               </Grid>
               {lieuCelebration !== 'dans la paroisse' &&
               <>
                 <Grid item xs={6}>
                   <TextField
-                    id="mar_dioceseCelebration"
                     label="Diocèse"
                     className={classes.textField}
                     margin="normal"
                     fullWidth
+                    value={dioceseCelebration} onChange={(e:any)=>setdioceseCelebration(e.target.value)}
                   />
                 </Grid>
               </>
               }
               <Grid item xs={12}>
                 <TextField
-                  id="mar_celebrant"
                   label="Prêtre Célébrant"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={celebrant} onChange={(e:any)=>setcelebrant(e.target.value)}
                 />
               </Grid>
             </Grid>
@@ -244,47 +327,46 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={5}>
                 <TextField
                   required
-                  id="mar_nomFiance"
                   label="Nom Fiancé"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={nomFiance} onChange={(e:any)=>setnomFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={5}>
                 <TextField
                   required
-                  id="mar_prenomFiance"
                   label="Prénom Fiancé"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={prenomFiance} onChange={(e:any)=>setprenomFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_pereFiance"
                   label="Fils de M"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={pereFiance} onChange={(e:any)=>setpereFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_mereFiance"
                   label="et de Mme"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={mereFiance} onChange={(e:any)=>setmereFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_dateNaissanceFiance"
                   label="Date de Naissance"
                   type="date"
                   className={classes.textField}
@@ -292,80 +374,80 @@ export const Mariage:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={dateNaissanceFiance} onChange={(e:any)=>setdateNaissanceFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_lieuNaissanceFiance"
                   label="Lieu de Naissance"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={lieuNaissanceFiance} onChange={(e:any)=>setlieuNaissanceFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="mar_professionFiance"
                   label="Profession"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={professionFiance} onChange={(e:any)=>setprofessionFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="mar_domicileFiance"
                   label="Domicile actuel"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={domicileFiance} onChange={(e:any)=>setdomicileFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="mar_domicileFuturFiance"
                   label="Domicile futur du nouveau foyer"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={domicileFuturFiance} onChange={(e:any)=>setdomicileFuturFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  id="mar_telFiance"
                   label="N° de téléphone fixe"
                   className={classes.textField}
                   margin="normal"
                   type="tel"
+                  value={telFiance} onChange={(e:any)=>settelFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  id="mar_mobileFiance"
                   label="N° de téléphone portable"
                   className={classes.textField}
                   margin="normal"
                   type="tel"
+                  value={mobileFiance} onChange={(e:any)=>setmobileFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="mar_emailFiance"
                   label="Adresse e-mail"
                   className={classes.textField}
                   margin="normal"
                   type="email"
                   fullWidth
+                  value={emailFiance} onChange={(e:any)=>setemailFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_dateBaptemeFiance"
                   label="Date de Baptême"
                   type="date"
                   className={classes.textField}
@@ -373,68 +455,64 @@ export const Mariage:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={dateBaptemeFiance} onChange={(e:any)=>setdateBaptemeFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_lieuBaptemeFiance"
                   label="Baptême : Commune et Eglise"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={lieuBaptemeFiance} onChange={(e:any)=>setlieuBaptemeFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">1ère communion</FormLabel>
-                  <RadioGroup aria-label="1ere communion" name="communionFiance" value={communionFiance} onChange={changeCommunionFiance} row >
+                  <RadioGroup aria-label="1ere communion" value={communionFiance} onChange={(e:any)=>setcommunionFiance(e.target.value)} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_communionFiance" value={communionFiance} readOnly />
               </Grid>
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Confirmation</FormLabel>
-                  <RadioGroup aria-label="Confirmation" name="confirmationFiance" value={confirmationFiance} onChange={changeConfirmationFiance} row >
+                  <RadioGroup aria-label="Confirmation" value={confirmationFiance} onChange={(e:any)=>setconfirmationFiance(e.target.value)} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_confirmationFiance" value={confirmationFiance} readOnly />
               </Grid>
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Avez vous déjà été marié civilement ?</FormLabel>
-                  <RadioGroup aria-label="marié civilement" name="marieFiance" value={marieFiance} onChange={changeMarieFiance} row >
+                  <RadioGroup aria-label="marié civilement" value={marieFiance} onChange={(e:any)=>setmarieFiance(e.target.value)} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_marieFiance" value={marieFiance} readOnly />
               </Grid>
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Avez vous des enfants ?</FormLabel>
-                  <RadioGroup aria-label="des enfants" name="enfantsFiance" value={enfantsFiance} onChange={changeEnfantsFiance} row >
+                  <RadioGroup aria-label="des enfants" value={enfantsFiance} onChange={(e:any)=>setenfantsFiance(e.target.value)} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_enfantsFiance" value={enfantsFiance} readOnly />
               </Grid>
               { enfantsFiance !== 'non' &&
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_nbEnfantsFiance"
                   label="Combien ?"
                   className={classes.textField}
                   margin="normal"
                   type="number"
-                  defaultValue="1"
+                  value={nbEnfantsFiance} onChange={(e:any)=>setnbEnfantsFiance(e.target.value)}
                 />
               </Grid>
               }
@@ -448,47 +526,46 @@ export const Mariage:React.FC<{}> = () => {
               <Grid item xs={5}>
                 <TextField
                   required
-                  id="mar_nomFiancee"
                   label="Nom Fiancée"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={nomFiancee} onChange={(e:any)=>setnomFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={5}>
                 <TextField
                   required
-                  id="mar_prenomFiancee"
                   label="Prénom Fiancée"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={prenomFiancee} onChange={(e:any)=>setprenomFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_pereFiancee"
                   label="Fille de M"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={pereFiancee} onChange={(e:any)=>setpereFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_mereFiancee"
                   label="et de Mme"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={mereFiancee} onChange={(e:any)=>setmereFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_dateNaissanceFiancee"
                   label="Date de Naissance"
                   type="date"
                   className={classes.textField}
@@ -496,80 +573,80 @@ export const Mariage:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={dateNaissanceFiancee} onChange={(e:any)=>setdateNaissanceFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_lieuNaissanceFiancee"
                   label="Lieu de Naissance"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={lieuNaissanceFiancee} onChange={(e:any)=>setlieuNaissanceFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="mar_professionFiancee"
                   label="Profession"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={professionFiancee} onChange={(e:any)=>setprofessionFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="mar_domicileFiancee"
                   label="Domicile actuel"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={domicileFiancee} onChange={(e:any)=>setdomicileFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="mar_domicileFuturFiancee"
                   label="Domicile futur du nouveau foyer"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={domicileFuturFiancee} onChange={(e:any)=>setdomicileFuturFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  id="mar_telFiancee"
                   label="N° de téléphone fixe"
                   className={classes.textField}
                   margin="normal"
                   type="tel"
+                  value={telFiancee} onChange={(e:any)=>settelFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  id="mar_mobileFiancee"
                   label="N° de téléphone portable"
                   className={classes.textField}
                   margin="normal"
                   type="tel"
+                  value={mobileFiancee} onChange={(e:any)=>setmobileFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="mar_emailFiancee"
                   label="Adresse e-mail"
                   className={classes.textField}
                   margin="normal"
                   type="email"
                   fullWidth
+                  value={emailFiancee} onChange={(e:any)=>setemailFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_dateBaptemeFiancee"
                   label="Date de Baptême"
                   type="date"
                   className={classes.textField}
@@ -577,57 +654,54 @@ export const Mariage:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={dateBaptemeFiancee} onChange={(e:any)=>setdateBaptemeFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="mar_lieuBaptemeFiancee"
                   label="Baptême : Commune et Eglise"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={lieuBaptemeFiancee} onChange={(e:any)=>setlieuBaptemeFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">1ère communion</FormLabel>
-                  <RadioGroup aria-label="1ere communion" name="communionFiancee" value={communionFiancee} onChange={changeCommunionFiancee} row >
+                  <RadioGroup aria-label="1ere communion" value={communionFiancee} onChange={(e:any)=>setcommunionFiancee(e.target.value)} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_communionFiancee" value={communionFiancee} readOnly />
               </Grid>
               <Grid item xs={6}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Confirmation</FormLabel>
-                  <RadioGroup aria-label="Confirmation" name="confirmationFiancee" value={confirmationFiancee} onChange={changeConfirmationFiancee} row >
+                  <RadioGroup aria-label="Confirmation" value={confirmationFiancee} onChange={(e:any)=>setconfirmationFiancee(e.target.value)} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_confirmationFiancee" value={confirmationFiancee} readOnly />
               </Grid>
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Avez vous déjà été mariée civilement ?</FormLabel>
-                  <RadioGroup aria-label="mariée civilement" name="marieFiancee" value={marieFiancee} onChange={changeMarieFiancee} row >
+                  <RadioGroup aria-label="mariée civilement" value={marieFiancee} onChange={(e:any)=>setmarieFiancee(e.target.value)} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_marieFiancee" value={marieFiancee} readOnly />
               </Grid>
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
                   <FormLabel component="legend">Avez vous des enfants ?</FormLabel>
-                  <RadioGroup aria-label="des enfants" name="enfantsFiancee" value={enfantsFiancee} onChange={changeEnfantsFiancee} row >
+                  <RadioGroup aria-label="des enfants" value={enfantsFiancee} onChange={(e:any)=>setenfantsFiancee(e.target.value)} row >
                     <FormControlLabel value="oui" control={<Radio />} label="oui" />
                     <FormControlLabel value="non" control={<Radio />} label="non" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="mar_enfantsFiancee" value={enfantsFiancee} readOnly />
               </Grid>
               { enfantsFiancee !== 'non' &&
               <Grid item xs={6}>
@@ -638,7 +712,7 @@ export const Mariage:React.FC<{}> = () => {
                   className={classes.textField}
                   margin="normal"
                   type="number"
-                  defaultValue="1"
+                  value={nbEnfantsFiancee} onChange={(e:any)=>setnbEnfantsFiancee(e.target.value)}
                 />
               </Grid>
               }
@@ -646,76 +720,34 @@ export const Mariage:React.FC<{}> = () => {
           </Paper>
         </Grid>
         <Grid item xs={6}>
+         {localStorageAvailable() && 
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DraftsIcon/>} onClick={() => {
+            saveForm(MARIAGE_IDX, getProps());
+            setDraftSaved(draftSaved+1);
+          }}>
+            Enregistre un brouillon
+          </Button>
+          }
+          {localStorageAvailable() && isSaved(MARIAGE_IDX) &&
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DeleteIcon/>} onClick={() => {
+            removeForm(getKey(MARIAGE_IDX));
+            setDraftSaved(draftSaved+1);
+          }}>
+            Supprime le brouillon
+          </Button>
+          }
           <MailTo 
             email={process.env.TO_EMAIL_MARIAGE||process.env.TO_EMAIL||''} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'Mariage')} 
             subject="Demande de Mariage" 
-            content={() => getMariageEmail()} >Email la demande</MailTo>
+            content={() => getMariageEmail(getProps())} >Email la demande</MailTo>
         </Grid>
       </Grid>
     </form>
   );
 };
 
-interface MariageProps {
-  lui: string;
-  elle: string;
-  dateSouhaitee: string;
-  horaire: string;
-  dateDemande: string;
-  enregistreur: string;
-  preparationPar: string;
-  preparation: string;
-  horsParoisse: string;
-  horsDiocese: string;
-  celebration: string;
-  messe: string;
-  lieuCelebration: string;
-  egliseCelebration: string;
-  dioceseCelebration: string;
-  celebrant: string;
-  nomFiance: string;
-  prenomFiance: string;
-  pereFiance: string;
-  mereFiance: string;
-  dateNaissanceFiance: string;
-  lieuNaissanceFiance: string;
-  professionFiance: string;
-  domicileFiance: string;
-  domicileFuturFiance: string;
-  telFiance: string;
-  mobileFiance: string;
-  emailFiance: string;
-  dateBaptemeFiance: string;
-  lieuBaptemeFiance: string;
-  communionFiance: string;
-  confirmationFiance: string;
-  marieFiance: string;
-  enfantsFiance: string;
-  nbEnfantsFiance: string;
-  nomFiancee: string;
-  prenomFiancee: string;
-  pereFiancee: string;
-  mereFiancee: string;
-  dateNaissanceFiancee: string;
-  lieuNaissanceFiancee: string;
-  professionFiancee: string;
-  domicileFiancee: string;
-  domicileFuturFiancee: string;
-  telFiancee: string;
-  mobileFiancee: string;
-  emailFiancee: string;
-  dateBaptemeFiancee: string;
-  lieuBaptemeFiancee: string;
-  communionFiancee: string;
-  confirmationFiancee: string;
-  marieFiancee: string;
-  enfantsFiancee: string;
-  nbEnfantsFiancee: string;
-}
-
-const getMariageEmail = ():string => {
-  const props = getMariageProps();
+const getMariageEmail = (props: MariageProps):string => {
   return `Demande de Mariage faite le : ${formatDate(props.dateDemande)} par : ${props.enregistreur}
 *******************************************
 Mariage de ${props.lui} et de ${props.elle}
@@ -755,15 +787,4 @@ Mariée civilement : ${props.marieFiancee}
 Nb Enfants : ${(props.enfantsFiancee !== 'non') ? props.nbEnfantsFiancee:'0'}
 
 `
-};
-
-const getMariageProps = ():MariageProps => {
-  const props = {} as MariageProps;
-  keys<MariageProps>().forEach(key => {
-    const elt = document.getElementById('mar_' + key) as HTMLInputElement;
-    if (elt) {
-      props[key] = elt.value;
-    }
-  });
-  return props;
 };

@@ -7,16 +7,71 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { MailTo } from './mailto';
-import { formatDate, getCCEmail, today, useStyles } from './utils';
-import { keys } from 'ts-transformer-keys';
+import { formatDate, getCCEmail, today, useStyles, findFirst, setInputValue, getToEmail } from './utils';
+import { OBSEQUES_IDX, LISTE_CELEBRANTS, ObsequesProps } from './Props';
+import { localStorageAvailable, saveForm, isSaved, getKey, removeForm } from './LocalStorage';
 
-export const Obseques:React.FC<{}> = () => {
+export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
   const classes = useStyles();
-  const [typeCelebration, setTypeCelebration] = React.useState('Messe');
-  const changeTypeCelebration = (event:React.ChangeEvent<HTMLInputElement>) => setTypeCelebration(event.target.value);
-  const [typeRite, setTypeRite] = React.useState('Inhumation');
-  const changeTypeRite = (event:React.ChangeEvent<HTMLInputElement>) => setTypeRite(event.target.value);
+  const [draftSaved, setDraftSaved] = React.useState(0);
+ 
+  const [typeCelebration, settypeCelebration] = React.useState(data?data.typeCelebration:'Messe');
+  const [dateDemande, setdateDemande] = React.useState(data?data.dateDemande:today());
+  const [enregistreur, setenregistreur] = React.useState(data?data.enregistreur:'');
+  const [celebrant, setcelebrant] = React.useState(data?data.celebrant:'');
+  const [emailCelebrant, setemailCelebrant] = React.useState(data?data.emailCelebrant:'');
+  const [dateCeremonie, setdateCeremonie] = React.useState(data?data.dateCeremonie:'');
+  const [heureCeremonie, setheureCeremonie] = React.useState(data?data.heureCeremonie:'');
+  const [lieuCeremonie, setlieuCeremonie] = React.useState(data?data.lieuCeremonie:'');
+  const [nom, setnom] = React.useState(data?data.nom:'');
+  const [nomFille, setnomFille] = React.useState(data?data.nomFille:'');
+  const [prenoms, setprenoms] = React.useState(data?data.prenoms:'');
+  const [dateNaissance, setdateNaissance] = React.useState(data?data.dateNaissance:'');
+  const [dateDeces, setdateDeces] = React.useState(data?data.dateDeces:'');
+  const [lieuDeces, setlieuDeces] = React.useState(data?data.lieuDeces:'');
+  const [typeRite, settypeRite] = React.useState(data?data.typeRite:'');
+  const [lieuRite, setlieuRite] = React.useState(data?data.lieuRite:'Inhumation');
+  const [adresseDefunt, setadresseDefunt] = React.useState(data?data.adresseDefunt:'');
+  const [contact, setcontact] = React.useState(data?data.contact:'');
+  const [parente, setparente] = React.useState(data?data.parente:'');
+  const [adresse, setadresse] = React.useState(data?data.adresse:'');
+  const [tel, settel] = React.useState(data?data.tel:'');
+  const [mobile, setmobile] = React.useState(data?data.mobile:'');
+  const [email, setemail] = React.useState(data?data.email:'');
+  const [pompesFunebres, setpompesFunebres] = React.useState(data?data.pompesFunebres:'');
+  const [telPompesFunebres, settelPompesFunebres] = React.useState(data?data.telPompesFunebres:'');
+  const getProps = ():ObsequesProps => ({
+    typeCelebration,
+    dateDemande,
+    enregistreur,
+    celebrant,
+    emailCelebrant,
+    dateCeremonie,
+    heureCeremonie,
+    lieuCeremonie,
+    nom,
+    nomFille,
+    prenoms,
+    dateNaissance,
+    dateDeces,
+    lieuDeces,
+    typeRite,
+    lieuRite,
+    adresseDefunt,
+    contact,
+    parente,
+    adresse,
+    tel,
+    mobile,
+    email,
+    pompesFunebres,
+    telPompesFunebres
+  });
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -31,27 +86,45 @@ export const Obseques:React.FC<{}> = () => {
             <Grid item xs={12}><Typography>Renseignements à recueillir auprès des Pompes Funèbres</Typography></Grid>
             <Grid item xs={12}>
               <FormControl component="fieldset" className={classes.formControl}>
-                <RadioGroup aria-label="type de Celebration" name="typeCelebration" value={typeCelebration} onChange={changeTypeCelebration} row >
+                <RadioGroup aria-label="type de Celebration" value={typeCelebration} onChange={(e:any)=>settypeCelebration(e.target.value)} row >
                   <FormControlLabel value="Messe" control={<Radio />} label="Messe" />
                   <FormControlLabel value="Bénédiction" control={<Radio />} label="Bénédiction" />
                 </RadioGroup>
               </FormControl>
-              <input style={{display: 'none'}} id="obs_typeCelebration" value={typeCelebration} readOnly />
             </Grid>
             <Grid item xs={12}>
+              <Autocomplete
+                id="free-solo-demo"
+                freeSolo
+                value={celebrant}
+                options={LISTE_CELEBRANTS.map(celeb => celeb.nom)}
+                onInputChange={(event: object, value: string, reason: string) => {
+                  setcelebrant(value);
+                  if (reason == 'reset') {
+                    const celeb = findFirst(LISTE_CELEBRANTS, val => val.nom == value);
+                    if (celeb) {
+                      setemailCelebrant(celeb.email);
+                    }
+                  } else {
+                    setemailCelebrant('');
+                  }
+                }}
+                renderInput={params => (
+                  <TextField {...params} label="Célébrant" margin="normal" className={classes.textField} required fullWidth />
+                )}
+              />
               <TextField
                 required
-                id="obs_celebrant"
-                label="Célébrant"
+                label="Email"
                 className={classes.textField}
                 margin="normal"
                 fullWidth
+                value={emailCelebrant} onChange={(e:any)=>setemailCelebrant(e.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
               <TextField
                 required
-                id="obs_dateCeremonie"
                 label="Date de la cérémonie"
                 type="date"
                 className={classes.textField}
@@ -59,12 +132,12 @@ export const Obseques:React.FC<{}> = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                value={dateCeremonie} onChange={(e:any)=>setdateCeremonie(e.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
               <TextField
                 required
-                id="obs_heureCeremonie"
                 label="Heure de la cérémonie"
                 type="time"
                 className={classes.textField}
@@ -72,16 +145,17 @@ export const Obseques:React.FC<{}> = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                value={heureCeremonie} onChange={(e:any)=>setheureCeremonie(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
-                id="obs_lieuCeremonie"
                 label="Lieu de la cérémonie"
                 className={classes.textField}
                 margin="normal"
                 fullWidth
+                value={lieuCeremonie} onChange={(e:any)=>setlieuCeremonie(e.target.value)}
               />
             </Grid>
           </Paper>
@@ -92,7 +166,6 @@ export const Obseques:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="obs_dateDemande"
                   label="Demande faite le"
                   type="date"
                   className={classes.textField}
@@ -100,17 +173,16 @@ export const Obseques:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  defaultValue={today()}
-                />
+                  value={dateDemande} onChange={(e:any)=>setdateDemande(e.target.value)}
+                  />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="obs_enregistreur"
                   label="par"
                   className={classes.textField}
                   margin="normal"
-                />
+                  value={enregistreur} onChange={(e:any)=>setenregistreur(e.target.value)}                />
               </Grid>
             </Grid>
           </Paper>
@@ -121,35 +193,34 @@ export const Obseques:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="obs_nom"
                   label="Nom du défunt"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={nom} onChange={(e:any)=>setnom(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="obs_nomFille"
                   label="Nom de jeune fille (s'il y a lieu)"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={nomFille} onChange={(e:any)=>setnomFille(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="obs_prenoms"
                   label="Prénom (s)"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={prenoms} onChange={(e:any)=>setprenoms(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="obs_dateNaissance"
                   label="Date du naissance du défunt"
                   className={classes.textField}
                   margin="normal"
@@ -157,12 +228,12 @@ export const Obseques:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={dateNaissance} onChange={(e:any)=>setdateNaissance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="obs_dateDeces"
                   label="Date du décès"
                   className={classes.textField}
                   margin="normal"
@@ -170,43 +241,43 @@ export const Obseques:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={dateDeces} onChange={(e:any)=>setdateDeces(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="obs_lieuDeces"
                   label="Lieu du décès"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={lieuDeces} onChange={(e:any)=>setlieuDeces(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControl component="fieldset" className={classes.formControl}>
-                  <RadioGroup aria-label="typeRite" name="typeRite" value={typeRite} onChange={changeTypeRite} row >
+                  <RadioGroup aria-label="typeRite" value={typeRite} onChange={(e:any)=>settypeRite(e.target.value)} row >
                     <FormControlLabel value="Inhumation" control={<Radio />} label="Inhumation" />
                     <FormControlLabel value="Crémation" control={<Radio />} label="Crémation" />
                   </RadioGroup>
                 </FormControl>
-                <input style={{display: 'none'}} id="obs_typeRite" value={typeRite} readOnly />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="obs_lieuRite"
                   label="Lieu"
                   className={classes.textField}
                   margin="normal"
+                  value={lieuRite} onChange={(e:any)=>setlieuRite(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="obs_adresseDefunt"
                   label="Adresse du défunt"
                   className={classes.textField}
                   margin="normal"
+                  value={adresseDefunt} onChange={(e:any)=>setadresseDefunt(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -214,54 +285,54 @@ export const Obseques:React.FC<{}> = () => {
                   <Grid container>
                     <Grid item xs={12}>
                       <TextField
-                        id="obs_contact"
                         label="Nom et prénom de la personne à contacter"
                         className={classes.textField}
                         margin="normal"
+                        value={contact} onChange={(e:any)=>setcontact(e.target.value)}
                       />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        id="obs_parente"
                         label="Lien de parenté avec le défunt"
                         className={classes.textField}
                         margin="normal"
+                        value={parente} onChange={(e:any)=>setparente(e.target.value)}
                       />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        id="obs_adresse"
                         label="Adresse"
                         className={classes.textField}
                         margin="normal"
+                        value={adresse} onChange={(e:any)=>setadresse(e.target.value)}
                       />
                     </Grid>
                     <Grid item xs={6}>
                       <TextField
-                        id="obs_tel"
                         label="N° de téléphone fixe"
                         className={classes.textField}
                         margin="normal"
                         type="tel"
+                        value={tel} onChange={(e:any)=>settel(e.target.value)}
                       />
                     </Grid>
                     <Grid item xs={6}>
                       <TextField
-                        id="obs_mobile"
                         label="N° de téléphone portable"
                         className={classes.textField}
                         margin="normal"
                         type="tel"
+                        value={mobile} onChange={(e:any)=>setmobile(e.target.value)}
                       />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        id="obs_email"
                         label="Adresse e-mail"
                         className={classes.textField}
                         margin="normal"
                         type="email"
                         fullWidth
+                        value={email} onChange={(e:any)=>setemail(e.target.value)}
                       />
                     </Grid>
                   </Grid>
@@ -272,19 +343,19 @@ export const Obseques:React.FC<{}> = () => {
                   <Grid container>
                     <Grid item xs={12}>
                       <TextField
-                        id="obs_pompesFunebres"
                         label="Entreprise des Pompes Funèbres"
                         className={classes.textField}
                         margin="normal"
+                        value={pompesFunebres} onChange={(e:any)=>setpompesFunebres(e.target.value)}
                       />
                     </Grid>
                     <Grid item xs={6}>
                       <TextField
-                        id="obs_telPompesFunebres"
                         label="N° de téléphone"
                         className={classes.textField}
                         margin="normal"
                         type="tel"
+                        value={telPompesFunebres} onChange={(e:any)=>settelPompesFunebres(e.target.value)}
                       />
                     </Grid>
                   </Grid>
@@ -294,46 +365,34 @@ export const Obseques:React.FC<{}> = () => {
           </Paper>
         </Grid>
         <Grid item xs={6}>
+          {localStorageAvailable() && 
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DraftsIcon/>} onClick={() => {
+            saveForm(OBSEQUES_IDX, getProps());
+            setDraftSaved(draftSaved+1);
+          }}>
+            Enregistre un brouillon
+          </Button>
+          }
+          {localStorageAvailable() && isSaved(OBSEQUES_IDX) &&
+          <Button variant="contained" color="primary" className={classes.button} endIcon={<DeleteIcon/>} onClick={() => {
+            removeForm(getKey(OBSEQUES_IDX));
+            setDraftSaved(draftSaved+1);
+          }}>
+            Supprime le brouillon
+          </Button>
+          }
           <MailTo 
-            email={process.env.TO_EMAIL_OBSEQUES||process.env.TO_EMAIL||''} 
+            email={() => getToEmail(process.env.TO_EMAIL_OBSEQUES||process.env.TO_EMAIL||'', emailCelebrant, celebrant)} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'Obseques')} 
             subject="Demande d'Obsèques" 
-            content={() => getObsequesEmail()} >Email la demande</MailTo>
+            content={() => getObsequesEmail(getProps())} >Email la demande</MailTo>
         </Grid>
       </Grid>
     </form>
   );
 };
 
-interface ObsequeProps {
-  typeCelebration: string;
-  dateDemande: string;
-  enregistreur: string;
-  celebrant: string;
-  dateCeremonie: string;
-  heureCeremonie: string;
-  lieuCeremonie: string;
-  nom: string;
-  nomFille: string;
-  prenoms: string;
-  dateNaissance: string;
-  dateDeces: string;
-  lieuDeces: string;
-  typeRite: string;
-  lieuRite: string;
-  adresseDefunt: string;
-  contact: string;
-  parente: String;
-  adresse: string;
-  tel: string;
-  mobile: string;
-  email: string;
-  pompesFunebres: string;
-  telPompesFunebres: string;
-}
-
-const getObsequesEmail = ():string => {
-  const props = getObsequeProps();
+const getObsequesEmail = (props: ObsequesProps):string => {
   return `Demande d'Obsèques faite le : ${formatDate(props.dateDemande)} par : ${props.enregistreur}
 *******************************************
 Célébration : ${props.typeCelebration}
@@ -359,15 +418,4 @@ Adresse e-mail : ${props.email}
 Entreprise des Pompes Funèbres : ${props.pompesFunebres}
 Tel : ${props.telPompesFunebres}
 `
-};
-
-const getObsequeProps = ():ObsequeProps => {
-  const props = {} as ObsequeProps;
-  keys<ObsequeProps>().forEach(key => {
-    const elt = document.getElementById('obs_' + key) as HTMLInputElement;
-    if (elt) {
-      props[key] = elt.value;
-    }
-  });
-  return props;
 };
