@@ -5,8 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const keysTransformer = require('ts-transformer-keys/transformer').default;
 const Dotenv = require('dotenv-webpack');
 
-module.exports = {
-    mode: 'production', //'development', //'production',
+var config = {
     entry: [
         "./src/App.tsx"
     ],
@@ -15,14 +14,6 @@ module.exports = {
         path: __dirname + "/dist",
         library: "FormulairesAccueil",
         libraryTarget: "umd", //"var" "commonjs" "umd"
-    },
-
-    // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
-
-    devServer: {
-        host: '0.0.0.0',
-        disableHostCheck: true
     },
 
     resolve: {
@@ -73,4 +64,22 @@ module.exports = {
             systemvars: true
         })
     ]
+};
+
+module.exports = (env, argv) => {
+  if (argv.mode === 'development') {
+    // Enable sourcemaps for debugging webpack's output.
+    config.devtool = 'source-map';
+
+    config.devServer = {
+      host: '0.0.0.0',
+      disableHostCheck: true
+    }
+
+  }
+//  if (argv.mode === 'production') {
+        //...
+//  }
+
+  return config;
 };
