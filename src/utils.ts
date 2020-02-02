@@ -1,8 +1,31 @@
 import { makeStyles } from "@material-ui/core";
 
+export const URI_KEY = 'cache';
+export const URI_FORM = 'form';
+
 export const formatDate = (inDate: string): string => {
   return inDate.split('-').reverse().join('/');
 };
+
+
+export const getToEmail = (emailBase: string, ...emailsAndNames: string[]) => {
+  const emails: string[] = []
+  if (emailBase) {
+    emails.push(emailBase);
+  }
+  if (emailsAndNames) {
+    for (let i = 0; i < emailsAndNames.length; i=i+2) {
+      if (emailsAndNames[i]) {
+        if (i+1 < emailsAndNames.length && emailsAndNames[i+1]) {
+          emails.push('"'+emailsAndNames[i+1]+'" <'+emailsAndNames[i]+'>');
+        } else {
+          emails.push(emailsAndNames[i]);
+        }
+      }
+    }
+  }
+  return emails.join(';');
+}
 
 export const getCCEmail = (email: string, type: string) => {
   const parts = email.split('@');

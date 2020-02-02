@@ -14,16 +14,40 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { MailTo } from './mailto';
 import { formatDate, getCCEmail, today, useStyles } from './utils';
 import { saveForm, localStorageAvailable, isSaved, getKey, removeForm } from './LocalStorage';
-import { CERT_BAPTEME_IDX, getCertificatBaptemeProps } from './Props';
+import { CERT_BAPTEME_IDX, CertificatBaptemeProps } from './Props';
 
-export const CertificatBapteme:React.FC<{}> = () => {
+export const CertificatBapteme:React.FC<{data?:CertificatBaptemeProps}> = ({data}) => {
   const classes = useStyles();
-  const [motif, setMotif] = React.useState('Communion');
-  const changeMotif = (event:React.ChangeEvent<HTMLInputElement>) => setMotif(event.target.value);
-  const [livraison, setLivraison] = React.useState('viendra chercher dans une dizaine de jours');
-  const changeLivraison = (event:React.ChangeEvent<HTMLInputElement>) => setLivraison(event.target.value);
   const [draftSaved, setDraftSaved] = React.useState(0);
 
+  const [motif, setmotif] = React.useState(data?data.motif:'Communion');
+  const [dateDemande, setdateDemande] = React.useState(data?data.dateDemande:today());
+  const [enregistreur, setenregistreur] = React.useState(data?data.enregistreur:'');
+  const [nom, setnom] = React.useState(data?data.nom:'');
+  const [nomFille, setnomFille] = React.useState(data?data.nomFille:'');
+  const [mere, setmere] = React.useState(data?data.mere:'');
+  const [egliseBapteme, setegliseBapteme] = React.useState(data?data.egliseBapteme:'');
+  const [dateBapteme, setdateBapteme] = React.useState(data?data.dateBapteme:'');
+  const [dateNaissance, setdateNaissance] = React.useState(data?data.dateNaissance:'');
+  const [tel, settel] = React.useState(data?data.tel:'');
+  const [email, setemail] = React.useState(data?data.email:'');
+  const [livraison, setlivraison] = React.useState(data?data.livraison:'viendra chercher dans une dizaine de jours');
+  const [adresseLivraison, setadresseLivraison] = React.useState(data?data.adresseLivraison:'');
+  const getProps = () => ({
+    motif,
+    dateDemande,
+    enregistreur,
+    nom,
+    nomFille,
+    mere,
+    egliseBapteme,
+    dateBapteme,
+    dateNaissance,
+    tel,
+    email,
+    livraison,
+    adresseLivraison
+  });
   return (
     <form className={classes.container} noValidate autoComplete="off">
       <Grid
@@ -40,7 +64,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
             <Grid item xs={12}>
               <FormControl component="fieldset" className={classes.formControl}>
                 <FormLabel component="legend">Motif de la demande :</FormLabel>
-                <RadioGroup aria-label="motif" name="cba_motif" value={motif} onChange={changeMotif} >
+                <RadioGroup aria-label="motif" value={motif} onChange={(e:any)=>setmotif(e.target.value)} >
                 <FormControlLabel value="Communion" control={<Radio />} label="Communion" />
                 <FormControlLabel value="Confirmation" control={<Radio />} label="Confirmation" />
                   <FormControlLabel value="Parrain, marraine" control={<Radio />} label="Parrain, marraine" />
@@ -48,7 +72,6 @@ export const CertificatBapteme:React.FC<{}> = () => {
                   <FormControlLabel value="Divers" control={<Radio />} label="Divers" />
                 </RadioGroup>
               </FormControl>
-              <input style={{display: 'none'}} id="cba_motif" value={motif} readOnly />
             </Grid>
           </Paper>
         </Grid>
@@ -58,7 +81,6 @@ export const CertificatBapteme:React.FC<{}> = () => {
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="cba_dateDemande"
                   label="Demande faite le"
                   type="date"
                   className={classes.textField}
@@ -66,16 +88,16 @@ export const CertificatBapteme:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  defaultValue={today()}
+                  value={dateDemande} onChange={(e:any)=>setdateDemande(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   required
-                  id="cba_enregistreur"
                   label="par"
                   className={classes.textField}
                   margin="normal"
+                  value={enregistreur} onChange={(e:any)=>setenregistreur(e.target.value)}
                 />
               </Grid>
             </Grid>
@@ -87,46 +109,45 @@ export const CertificatBapteme:React.FC<{}> = () => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="cba_nom"
                   label="Nom et prénom"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={nom} onChange={(e:any)=>setnom(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="cba_nomFille"
                   label="Nom de Jeune Fille"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={nomFille} onChange={(e:any)=>setnomFille(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="cba_mere"
                   label="Nom de jeune fille de la mère"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={mere} onChange={(e:any)=>setmere(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="cba_egliseBapteme"
                   label="Eglise du Baptême"
                   className={classes.textField}
                   margin="normal"
                   fullWidth
+                  value={egliseBapteme} onChange={(e:any)=>setegliseBapteme(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="cba_dateBapteme"
                   label="Date du baptême"
                   className={classes.textField}
                   margin="normal"
@@ -134,12 +155,12 @@ export const CertificatBapteme:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={dateBapteme} onChange={(e:any)=>setdateBapteme(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="cba_dateNaissance"
                   label="Date de naissance"
                   className={classes.textField}
                   margin="normal"
@@ -147,25 +168,26 @@ export const CertificatBapteme:React.FC<{}> = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={dateNaissance} onChange={(e:any)=>setdateNaissance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="cba_tel"
                   label="N° de téléphone"
                   className={classes.textField}
                   margin="normal"
                   type="phone"
+                  value={tel} onChange={(e:any)=>settel(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  id="cba_email"
                   label="Adresse e-mail"
                   className={classes.textField}
                   margin="normal"
                   type="email"
                   fullWidth
+                  value={email} onChange={(e:any)=>setemail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -173,20 +195,19 @@ export const CertificatBapteme:React.FC<{}> = () => {
                   <Grid container>
                     <Grid item xs={12}>
                       <FormControl component="fieldset" className={classes.formControl}>
-                        <RadioGroup aria-label="livraison" name="cba_livraison" value={livraison} onChange={changeLivraison} >
+                        <RadioGroup aria-label="livraison" value={livraison} onChange={(e:any)=>setlivraison(e.target.value)} >
                           <FormControlLabel value="viendra chercher dans une dizaine de jours" control={<Radio />} label="viendra chercher dans une dizaine de jours" />
                           <FormControlLabel value="à envoyer :" control={<Radio />} label="à envoyer :" />
                         </RadioGroup>
                       </FormControl>
-                      <input style={{display: 'none'}} id="cba_livraison" value={livraison} readOnly />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        id="cba_adresseLivraison"
                         label="Adresse"
                         className={classes.textField}
                         margin="normal"
                         disabled={livraison !== 'à envoyer :'}
+                        value={adresseLivraison} onChange={(e:any)=>setadresseLivraison(e.target.value)}
                       />
                     </Grid>
                   </Grid>
@@ -198,7 +219,7 @@ export const CertificatBapteme:React.FC<{}> = () => {
         <Grid item xs={6}>
           {localStorageAvailable() && 
           <Button variant="contained" color="primary" className={classes.button} endIcon={<DraftsIcon/>} onClick={() => {
-            saveForm(CERT_BAPTEME_IDX, getCertificatBaptemeProps());
+            saveForm(CERT_BAPTEME_IDX, getProps());
             setDraftSaved(draftSaved+1);
           }}>
             Enregistre un brouillon
@@ -216,15 +237,14 @@ export const CertificatBapteme:React.FC<{}> = () => {
             email={process.env.TO_EMAIL_CERTIFICAT||process.env.TO_EMAIL||''} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'CertificatBapteme')} 
             subject="Demande de Certificat de Baptême" 
-            content={() => getCertificatBaptemeEmail()} >Email la demande</MailTo>
+            content={() => getCertificatBaptemeEmail(getProps())} >Email la demande</MailTo>
         </Grid>
       </Grid>
     </form>
   );
 };
 
-const getCertificatBaptemeEmail = ():string => {
-  const props = getCertificatBaptemeProps();
+const getCertificatBaptemeEmail = (props: CertificatBaptemeProps):string => {
   return `Demande faite le : ${formatDate(props.dateDemande)} par : ${props.enregistreur}
 Motif de la Demande : ${props.motif}
 *******************************************

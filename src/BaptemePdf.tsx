@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { formatDate } from './utils';
@@ -28,50 +29,14 @@ const styles = StyleSheet.create({
   }
 });
 
-export const getBaptemeEmail = ():string => {
-  const props = getBaptemeProps();
-  return `Date du Baptême : ${formatDate(props.dateBapteme)}
-*******************************************
-Demande faite le : ${formatDate(props.dateDemande)} par : ${props.enregistreur}
-*******************************************
-Nom et prénom de l'enfant : ${props.enfant}
-Date de naissance et lieu : ${formatDate(props.dateEnfant)} à ${props.lieuEnfant}
-*******************************************
-Prénom du père : ${props.pere}
-Prénom et nom de jeune fille de la mère : ${props.mere}
-Adresse de la famille: ${props.adresseFamille}
-N° de téléphone: ${props.tel}
-Adresse e-mail : ${props.email}
-*******************************************
-Nom est prénom du parrain : ${props.parrain}
-Age : ${props.parrainAge}
-Baptisé : ${props.parrainBaptise}
-Nom est prénom de la marraine : ${props.marraine}
-Age : ${props.marraineAge}
-Baptisé : ${props.marraineBaptisee}
-*******************************************
-Frères et Soeurs :
-Nom et prénom: Age
-${props.frere1}: ${props.frere1Age}
-${props.frere2}: ${props.frere2Age}
-${props.frere3}: ${props.frere3Age}
-${props.frere4}: ${props.frere4Age}
-${props.frere5}: ${props.frere5Age}
-${props.frere6}: ${props.frere6Age}
-${props.frere7}: ${props.frere7Age}
-*******************************************
-Choix de la session de préparation : ${props.preparation}
-`
-};
-
 // Create Document Component
-export const BaptemePdf:React.FC<BaptemeProps> = ({  dateBapteme, dateDemande/*, lieu, lieuExterieur*/, enregistreur, enfant, dateEnfant, lieuEnfant, pere, mere, adresseFamille, tel, email, parrain, parrainBaptise, parrainAge, marraine, marraineBaptisee, marraineAge, frere1, frere1Age, frere2, frere2Age, frere3, frere3Age, frere4, frere4Age, frere5, frere5Age, frere6, frere6Age, frere7, frere7Age, preparation}) => (
+export const BaptemePdf:React.FC<BaptemeProps> = ({  dateBapteme, dateDemande, lieu, lieuExterieur, enregistreur, enfant, dateEnfant, lieuEnfant, pere, mere, adresseFamille, tel, email, parrain, parrainBaptise, parrainAge, marraine, marraineBaptisee, marraineAge, frere1, frere1Age, frere2, frere2Age, frere3, frere3Age, frere4, frere4Age, frere5, frere5Age, frere6, frere6Age, frere7, frere7Age, preparation}) => (
   <Document title="Demande de baptême">
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
         <Text style={styles.title}>Demande de Baptême</Text>
         <Text>Date du Baptême : {formatDate(dateBapteme)}</Text>
-        {/*<Text>Lieu de célébration : {lieu} {lieuExterieur}</Text>*/}
+        <Text>Lieu de célébration : {lieu} {lieuExterieur}</Text>
       </View>
       <View style={styles.section}>
         <Text>Demande faite le : {formatDate(dateDemande)} par : {enregistreur}</Text>
@@ -110,3 +75,4 @@ export const BaptemePdf:React.FC<BaptemeProps> = ({  dateBapteme, dateDemande/*,
     </Page>
   </Document>
 );
+*/

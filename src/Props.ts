@@ -1,4 +1,6 @@
 import { keys } from 'ts-transformer-keys';
+import { KEY_SEPARATOR, loadForm } from './LocalStorage';
+import { setInputValue } from './utils';
 
 export const BAPTEME_IDX = 0;
 export const CERT_BAPTEME_IDX = 1;
@@ -79,7 +81,7 @@ export interface ObsequesProps {
   lieuRite: string;
   adresseDefunt: string;
   contact: string;
-  parente: String;
+  parente: string;
   adresse: string;
   tel: string;
   mobile: string;
@@ -147,113 +149,28 @@ export interface MariageProps {
 
 export type FormulaireProps = BaptemeProps|CertificatBaptemeProps|ObsequesProps|MariageProps|undefined;
 
-export const getObsequesProps = ():ObsequesProps => {
-  const props = {} as ObsequesProps;
-  keys<ObsequesProps>().forEach(key => {
-    const elt = document.getElementById('obs_' + key) as HTMLInputElement;
-    if (elt) {
-      props[key] = elt.value;
-    }
-  });
-  return props;
-};
-
-export const setObsequesProps = (props: ObsequesProps) => {
-  keys<ObsequesProps>().forEach(key => {
-    const elt = document.getElementById('obs_' + key) as HTMLInputElement;
-    if (elt) {
-      elt.value = props[key] as string;
-      if (['typeCelebration', 'typeRite'].indexOf(key) >= 0) {
-        selectRadioButton('obs_' + key, props[key] as string);
-      }
-    }
-  });
-};
-
-export const getBaptemeProps = ():BaptemeProps => {
-  const props = {} as BaptemeProps;
-  keys<BaptemeProps>().forEach(key => {
-    const elt = document.getElementById('bap_'+key) as HTMLInputElement;
-    if (elt) {
-      props[key] = elt.value;
-    }
-  });
-  return props;
-};
-
-export const setBaptemeProps = (props:BaptemeProps) => {
-  keys<BaptemeProps>().forEach(key => {
-    const elt = document.getElementById('bap_'+key) as HTMLInputElement;
-    if (elt) {
-      elt.value = props[key] as string;
-      if (['parrainBaptise', 'marraineBaptisee'].indexOf(key) >= 0) {
-        selectRadioButton('bap_' + key, props[key] as string);
-      }
-    }
-  });
-};
-
-export const getMariageProps = ():MariageProps => {
-  const props = {} as MariageProps;
-  keys<MariageProps>().forEach(key => {
-    const elt = document.getElementById('mar_' + key) as HTMLInputElement;
-    if (elt) {
-      props[key] = elt.value;
-    }
-  });
-  return props;
-};
-
-export const setMariageProps = (props: MariageProps) => {
-  keys<MariageProps>().forEach(key => {
-    const elt = document.getElementById('mar_' + key) as HTMLInputElement;
-    if (elt) {
-      elt.value = props[key];
-      if (['horaire', 'preparation', 'celebration', 'messe', 'lieuCelebration', 'communionFiance', 'confirmationFiance', 'marieFiance', 'enfantsFiance', 'communionFiancee', 'confirmationFiancee', 'marieFiancee', 'enfantsFiancee'].indexOf(key) >= 0) {
-        selectRadioButton('mar_' + key, props[key]);
-      }
-    }
-  });
-  return props;
-};
-
-export const getCertificatBaptemeProps = ():CertificatBaptemeProps => {
-  const props = {} as CertificatBaptemeProps;
-  keys<CertificatBaptemeProps>().forEach(key => {
-    const elt = document.getElementById('cba_' + key) as HTMLInputElement;
-    if (elt) {
-      props[key] = elt.value;
-    }
-  });
-  return props;
-};
-
-export const setCertificatBaptemeProps = (props: CertificatBaptemeProps) => {
-  keys<CertificatBaptemeProps>().forEach(key => {
-    const elt = document.getElementById('cba_' + key) as HTMLInputElement;
-    if (elt) {
-      elt.value = props[key];
-      if (['motif', 'livraison'].indexOf(key) >= 0) {
-        selectRadioButton('cba_' + key, props[key]);
-      }
-    }
-  });
-};
-
-const selectRadioButton = (name: string, value: string) => {
-  const rbs = document.getElementsByName(name);
-  if (rbs && rbs.length) {
-    rbs.forEach(rb => {
-      if ((rb as HTMLInputElement).value == value) {
-        (rb as HTMLInputElement).checked = true;
-      } else {
-        (rb as HTMLInputElement).checked = false;
-      }
-    });
-  }
-}
-
 export const LISTE_CELEBRANTS:Array<{nom: string, email: string}> = [
-  {nom: 'Père David', email: 'David@eglise.fr'}, 
-  {nom: 'Père Bertrand Monard', email: 'Bertrand@eglise.fr'}
+  {nom: 'Appolinaire Ika', email: 'goappolinaire@yahoo.fr'},
+  {nom: 'David Maria-Susaï', email: 'daraaj86@gmail.com'},
+  {nom: 'André Degorces', email: 'andre.degorces@wanadoo.fr'}, 
+  {nom: 'Luca Astolfi', email: 'luca91.astolfi@gmail.com'},
+  {nom: 'Bertrand Monnard', email: 'b.monnard17@gmail.com'}
 ];
+
+export const getCachedData = (val: string): FormulaireProps => {
+  const parts = val.split(KEY_SEPARATOR);
+  if (parts.length > 2) {
+    setInputValue('timestamp', parts[2]);
+    switch (parseInt(parts[1])) {
+      case BAPTEME_IDX:
+        return loadForm<BaptemeProps>(val);
+      case CERT_BAPTEME_IDX:
+        return loadForm<CertificatBaptemeProps>(val);
+      case OBSEQUES_IDX:
+        return loadForm<ObsequesProps>(val);
+      case MARIAGE_IDX:
+        return loadForm<MariageProps>(val);
+    }
+  }
+  return undefined;
+}
