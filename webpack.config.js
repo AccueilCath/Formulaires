@@ -6,7 +6,7 @@ const keysTransformer = require('ts-transformer-keys/transformer').default;
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-    mode: 'development', //'development', //'production',
+    mode: 'production', //'development', //'production',
     entry: [
         "./src/App.tsx"
     ],
