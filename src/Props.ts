@@ -1,4 +1,3 @@
-import { keys } from 'ts-transformer-keys';
 import { KEY_SEPARATOR, loadForm } from './LocalStorage';
 import { setInputValue } from './utils';
 
@@ -154,7 +153,8 @@ export const LISTE_CELEBRANTS:Array<{nom: string, email: string}> = [
   {nom: 'David Maria-Susaï', email: 'daraaj86@gmail.com'},
   {nom: 'André Degorces', email: 'andre.degorces@wanadoo.fr'}, 
   {nom: 'Luca Astolfi', email: 'luca91.astolfi@gmail.com'},
-  {nom: 'Bertrand Monnard', email: 'b.monnard17@gmail.com'}
+  {nom: 'Bertrand Monnard', email: 'b.monnard17@gmail.com'},
+  {nom: 'Père Laurent Chaumet', email: 'perechaumet@gmail.com'}
 ];
 
 export const getCachedData = (val: string): FormulaireProps => {
