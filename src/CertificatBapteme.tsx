@@ -159,14 +159,13 @@ export const CertificatBapteme:React.FC<{data?:CertificatBaptemeProps}> = ({data
                   value={dateBapteme} onChange={(e:any)=>setdateBapteme(e.target.value)}
                 />
               */}
-                <FormControl margin="normal">
+                <FormControl margin="normal" className={classes.textField}>
                   <InputLabel htmlFor="formatted-text-mask-input">Date du baptême</InputLabel>
                   <Input
                     value={dateBapteme}
                     onChange={(e:any)=>setdateBapteme(e.target.value)}
                     id="formatted-text-mask-input"
                     inputComponent={TextMaskCustom as any}
-                    className={classes.textField}
                     margin="dense"
                   />
                 </FormControl>
