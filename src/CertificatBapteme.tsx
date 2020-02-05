@@ -11,6 +11,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import DeleteIcon from '@material-ui/icons/Delete';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import MaskedInput from 'react-text-mask';
 import { MailTo } from './mailto';
 import { formatDate, getCCEmail, today, useStyles } from './utils';
 import { saveForm, localStorageAvailable, isSaved, getKey, removeForm } from './LocalStorage';
@@ -146,17 +149,27 @@ export const CertificatBapteme:React.FC<{data?:CertificatBaptemeProps}> = ({data
                 />
               </Grid>
               <Grid item xs={12}>
+              {/*
                 <TextField
                   required
                   label="Date du baptême"
                   className={classes.textField}
                   margin="normal"
-                  type="date"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
+                  
                   value={dateBapteme} onChange={(e:any)=>setdateBapteme(e.target.value)}
                 />
+              */}
+                <FormControl margin="normal">
+                  <InputLabel htmlFor="formatted-text-mask-input">Date du baptême</InputLabel>
+                  <Input
+                    value={dateBapteme}
+                    onChange={(e:any)=>setdateBapteme(e.target.value)}
+                    id="formatted-text-mask-input"
+                    inputComponent={TextMaskCustom as any}
+                    className={classes.textField}
+                    margin="dense"
+                  />
+                </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -260,3 +273,81 @@ Adresse e-mail : ${props.email}
 ${props.livraison} ${props.adresseLivraison}
 `
 };
+
+interface TextMaskCustomProps {
+  inputRef: (ref: HTMLInputElement | null) => void;
+}
+
+const TextMaskCustom = (props: TextMaskCustomProps) => {
+  const { inputRef, ...other } = props;
+
+  return (
+    <MaskedInput
+      {...other}
+      ref={(ref: any) => {
+        inputRef(ref ? ref.inputElement : null);
+      }}
+      mask={[/[\s\d]/, /[\s\d]/, '/', /[\s\d]/, /[\s\d]/, '/',  /[\d]/, /\d/, /\d/, /\d/]}
+      showMask
+      placeholderChar={'\u2000'}
+      pipe={createAutoCorrectedDatePipe('dd/mm/yyyy', {minYear:1800, maxYear: new Date().getFullYear()})}
+    />
+  );
+}
+
+const maxValueMonth = [31, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+const formatOrder = ['yyyy', 'yy', 'mm', 'dd', 'HH', 'MM', 'SS']
+const createAutoCorrectedDatePipe = (dateFormat = 'mm dd yyyy', {
+  minYear = 1,
+  maxYear = 9999
+} = {}) => {
+  const dateFormatArray = dateFormat
+    .split(/[^dmyHMS]+/)
+    .sort((a, b) => formatOrder.indexOf(a) - formatOrder.indexOf(b))
+  return (conformedValue: string) => {
+    const indexesOfPipedChars:number[] = []
+    const maxValue:any = {'dd': 31, 'mm': 12, 'yy': 99, 'yyyy': maxYear, 'HH': 23, 'MM': 59, 'SS': 59}
+    const minValue:any = {'dd': 1, 'mm': 1, 'yy': 0, 'yyyy': minYear, 'HH': 0, 'MM': 0, 'SS': 0}
+    const conformedValueArr = conformedValue.split('')
+
+    // Check first digit
+    dateFormatArray.forEach((format) => {
+      const position = dateFormat.indexOf(format)
+      const maxFirstDigit = parseInt(maxValue[format].toString().substr(0, 1), 10)
+
+      if (parseInt(conformedValueArr[position], 10) > maxFirstDigit) {
+        conformedValueArr[position + 1] = conformedValueArr[position]
+        conformedValueArr[position] = '' + 0
+        indexesOfPipedChars.push(position)
+      }
+    })
+
+    // Check for invalid date
+    let month = 0
+    const isInvalid = dateFormatArray.some((format) => {
+      const position = dateFormat.indexOf(format)
+      const length = format.length
+      const textValue = conformedValue.substr(position, length).replace(/\D/g, '')
+      const value = parseInt(textValue, 10)
+      if (format === 'mm') {
+        month = value || 0
+      }
+      const maxValueForFormat = format === 'dd' ? maxValueMonth[month] : maxValue[format]
+      if (format === 'yyyy' && (minYear !== 1 || maxYear !== 9999)) {
+        const scopedMaxValue = parseInt(maxValue[format].toString().substring(0, textValue.length), 10)
+        const scopedMinValue = parseInt(minValue[format].toString().substring(0, textValue.length), 10)
+        return value < scopedMinValue || value > scopedMaxValue
+      }
+      return value > maxValueForFormat || (textValue.length === length && value < minValue[format])
+    })
+
+    if (isInvalid) {
+      return false
+    }
+
+    return {
+      value: conformedValueArr.join(''),
+      indexesOfPipedChars
+    }
+  }
+}

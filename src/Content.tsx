@@ -64,9 +64,6 @@ export const Content: React.FC<{}> = () => {
   }
   const [formId, setFormId] = React.useState(keyFormId);
   const handleChange = (event: React.ChangeEvent<{}>, newFormId: number) => {
-    if (formId == newFormId) {
-      return;
-    }
     if (newFormId == BROUILLONS_IDX) {
       setFormId(newFormId);
     } else {
