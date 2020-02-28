@@ -77,22 +77,17 @@ export const setInputValue = (id: string, value: string) => {
     }
 }
 
-const LISTE_CELEBRANTS:Array<{nom: string, email: string}> = [];/*[
-  {nom: 'Père Appolinaire Ika', email: 'goappolinaire@yahoo.fr'},
-  {nom: 'Père David Maria-Susaï', email: 'daraaj86@gmail.com'},
-  {nom: 'André Degorces', email: 'andre.degorces@wanadoo.fr'}, 
-  {nom: 'Père Luca Astolfi', email: 'luca91.astolfi@gmail.com'},
-  {nom: 'Père Bertrand Monnard', email: 'b.monnard17@gmail.com'},
-  {nom: 'Père Laurent Chaumet', email: 'perechaumet@gmail.com'}
-];*/
-
+const LISTE_CELEBRANTS:Array<{nom: string, email: string}> = JSON.parse(process.env.LISTE_CELEBRANTS||'[]');
 export const getCelebrants = ():Array<{nom: string, email: string}> => {
-  if (!LISTE_CELEBRANTS.length) {
-    (process.env.LISTE_CELEBRANTS || '').split(';').forEach(celeb => {
-      const parts = celeb.trim().split(/[\""<>]/);
-      LISTE_CELEBRANTS.push({nom: findFirst(parts, part => !!part)||'', email:findFirst(parts.reverse(), part => !!part)||''})
-    });
-  }
   return LISTE_CELEBRANTS;
 }
 
+const hostList=JSON.parse(process.env.MAIL_HOSTS||'{}');
+export const getEmails = (source:string):string => {
+  return source.split('@').map((part, idx) => {
+    if (idx > 0) {
+      part = part.replace(/(\d+)/, (undefined, p1)=>hostList[p1]);
+    }
+    return part;
+  }).join('@');
+}

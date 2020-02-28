@@ -12,7 +12,7 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { MailTo } from './mailto';
-import { formatDate, getCCEmail, today, useStyles, findFirst, setInputValue, getToEmail, getCelebrants } from './utils';
+import { formatDate, getCCEmail, today, useStyles, findFirst, getToEmail, getCelebrants, getEmails } from './utils';
 import { OBSEQUES_IDX, ObsequesProps } from './Props';
 import { localStorageAvailable, saveForm, isSaved, getKey, removeForm } from './LocalStorage';
 
@@ -103,7 +103,7 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
                   if (reason == 'reset') {
                     const celeb = findFirst(getCelebrants(), val => val.nom == value);
                     if (celeb) {
-                      setemailCelebrant(celeb.email);
+                      setemailCelebrant(getEmails(celeb.email));
                     }
                   } else {
                     setemailCelebrant('');
