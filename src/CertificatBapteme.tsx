@@ -265,7 +265,7 @@ Nom de Jeune Fille : ${props.nomFille}
 Nom de la Mère : ${props.mere}
 Eglise du Baptême : ${props.egliseBapteme}
 Date du Baptême : ${props.dateBapteme}
-Date de Naissance : ${props.dateNaissance}
+Date de Naissance : ${formatDate(props.dateNaissance)}
 N° de téléphone: ${props.tel}
 Adresse e-mail : ${props.email}
 *******************************************

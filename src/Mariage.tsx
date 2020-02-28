@@ -751,7 +751,7 @@ const getMariageEmail = (props: MariageProps):string => {
   return `Demande de Mariage faite le : ${formatDate(props.dateDemande)} par : ${props.enregistreur}
 *******************************************
 Mariage de ${props.lui} et de ${props.elle}
-Date souhaitée : ${props.dateSouhaitee} à ${props.horaire}
+Date souhaitée : ${formatDate(props.dateSouhaitee)} à ${props.horaire}
 *******************************************
 Préparation par le père : ${props.preparationPar}
 ${props.preparation} ${(props.preparation !== 'dans la paroisse') ? ('Eglise : ' + props.horsParoisse + ' Diocèse : ' + props.horsDiocese):''}
