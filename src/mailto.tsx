@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import MailIcon from '@material-ui/icons/Mail';
+import { getEmails } from './utils';
 
 export interface MailToProps {
   email: string|(() => string);
@@ -26,8 +27,8 @@ export const MailTo:React.FC<MailToProps> = ({email, classement, subject, conten
   const onClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     const button = evt.currentTarget as HTMLAnchorElement;
     button.target = 'Mail';
-    const dest = (typeof email == 'string') ? email : email();
-    button.href = `mailto:${encodeURIComponent(dest)}?subject=${encodeURIComponent(subject)}&cc=${encodeURIComponent(classement)}&body=${encodeURIComponent(content())}`;
+    const dest = getEmails((typeof email == 'string') ? email : email());
+    button.href = `mailto:${encodeURIComponent(dest)}?subject=${encodeURIComponent(subject)}&cc=${encodeURIComponent(getEmails(classement))}&body=${encodeURIComponent(content())}`;
   };
   return <Button 
     href=""
