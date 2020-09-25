@@ -51,12 +51,10 @@ var config = {
             },
             debug: true
         }),
-        new CopyWebpackPlugin([
-            {from: 'static/*.css'},
-            {from: 'static/*.svg'},
-            {from: 'static/*.png'},
-            {from: 'static/*.js'}
-        ]),
+        new CopyWebpackPlugin({
+          patterns: [
+            {from: 'static/*.css'}
+        ]}),
         new HtmlWebpackPlugin({
             template: 'static/index.html'
         }),
