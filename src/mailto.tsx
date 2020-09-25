@@ -7,7 +7,7 @@ import { getEmails } from './utils';
 export interface MailToProps {
   email: string|(() => string);
   classement: string;
-  subject: string;
+  subject: string|(() => string);
   content: () => string;
 }
 
@@ -28,7 +28,7 @@ export const MailTo:React.FC<MailToProps> = ({email, classement, subject, conten
     const button = evt.currentTarget as HTMLAnchorElement;
     button.target = 'Mail';
     const dest = getEmails((typeof email == 'string') ? email : email());
-    button.href = `mailto:${encodeURIComponent(dest)}?subject=${encodeURIComponent(subject)}&cc=${encodeURIComponent(getEmails(classement))}&body=${encodeURIComponent(content())}`;
+    button.href = `mailto:${encodeURIComponent(dest)}?subject=${encodeURIComponent((typeof subject == 'string') ? subject : subject())}&cc=${encodeURIComponent(getEmails(classement))}&body=${encodeURIComponent(content())}`;
   };
   return <Button 
     href=""

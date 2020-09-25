@@ -384,7 +384,7 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
           <MailTo 
             email={() => getToEmail(process.env.TO_EMAIL_OBSEQUES||process.env.TO_EMAIL||'', emailCelebrant, celebrant)} 
             classement={getCCEmail(process.env.CC_EMAIL||'', 'Obseques')} 
-            subject="Demande d'Obsèques" 
+            subject={() => getObsequesSubject(getProps())} 
             content={() => getObsequesEmail(getProps())} >Email la demande</MailTo>
         </Grid>
       </Grid>
@@ -392,6 +392,9 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
   );
 };
 
+const getObsequesSubject = (props: ObsequesProps): string => {
+  return `Demande d'Obsèques pour ${props.nom} ${props.prenoms}`;
+}
 const getObsequesEmail = (props: ObsequesProps):string => {
   return `Demande d'Obsèques faite le : ${formatDate(props.dateDemande)} par : ${props.enregistreur}
 *******************************************
