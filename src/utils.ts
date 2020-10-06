@@ -84,10 +84,12 @@ export const getCelebrants = ():Array<{nom: string, email: string}> => {
 
 const hostList=JSON.parse(process.env.MAIL_HOSTS||'{}');
 export const getEmails = (source:string):string => {
-  return source.split('@').map((part, idx) => {
-    if (idx > 0) {
-      part = part.replace(/(\d+)/, (undefined, p1)=>hostList[p1]);
-    }
-    return part;
-  }).join('@');
+  return source.split(';').map((email) => {
+    return email.split('@').map((part, idx) => {
+      if (idx > 0) {
+        part = part.replace(/(\d+)/, (undefined, p1)=>hostList[p1]);
+      }
+      return part;
+    }).join('@');
+  }).join(';');
 }
