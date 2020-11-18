@@ -23,24 +23,32 @@ var config = {
 
     module: {
         rules: [
-            // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
+          // workaround for https://github.com/webpack/webpack/issues/11467
+          {
+            test: /\.m?js/, 
+            resolve: 
             {
-                test: /\.tsx?$/,
-                loader: "ts-loader",
-                options: {
-                  getCustomTransformers: program => ({
-                    before: [
-                      keysTransformer(program)
-                    ]
-                  })
-                }
-            },
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            {
-                test: /\.tsx?$/,
-                enforce: "pre",
-                loader: "source-map-loader"
+              fullySpecified: false
             }
+          },
+          // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
+          {
+            test: /\.tsx?$/,
+            loader: "ts-loader",
+            options: {
+              getCustomTransformers: program => ({
+                before: [
+                  keysTransformer(program)
+                ]
+              })
+            }
+          },
+          // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+          {
+            test: /\.tsx?$/,
+            enforce: "pre",
+            loader: "source-map-loader"
+          }
         ]
 
     },
