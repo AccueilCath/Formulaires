@@ -8,7 +8,9 @@
     "build": "del-cli dist && webpack --mode=production",
     "build:dev": "del-cli dist && webpack --mode=development",
     "start:dev": "webpack serve --mode=development",
-    "start": "node server.js"
+    "start": "node server.js",
+    "deploy": "npm run build && gh-pages -d dist",
+    "visit": "https://accueilcath.github.io/Formulaires/"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +23,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "del-cli": "^5.0.0",
     "dotenv-webpack": "^8.0.1",
+    "gh-pages": "^4.0.0",
     "html-webpack-plugin": "^5.2.0",
     "source-map-loader": "^4.0.0",
     "ts-loader": "^9.3.1",
