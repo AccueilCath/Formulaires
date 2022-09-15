@@ -40,6 +40,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
   const [prenomFiance, setprenomFiance] = React.useState(data?data.prenomFiance:'');
   const [pereFiance, setpereFiance] = React.useState(data?data.pereFiance:'');
   const [mereFiance, setmereFiance] = React.useState(data?data.mereFiance:'');
+  const [mereJeuneFiance, setmereJeuneFiance] = React.useState(data?data.mereJeuneFiance:'');
   const [dateNaissanceFiance, setdateNaissanceFiance] = React.useState(data?data.dateNaissanceFiance:'');
   const [lieuNaissanceFiance, setlieuNaissanceFiance] = React.useState(data?data.lieuNaissanceFiance:'');
   const [professionFiance, setprofessionFiance] = React.useState(data?data.professionFiance:'');
@@ -59,6 +60,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
   const [prenomFiancee, setprenomFiancee] = React.useState(data?data.prenomFiancee:'');
   const [pereFiancee, setpereFiancee] = React.useState(data?data.pereFiancee:'');
   const [mereFiancee, setmereFiancee] = React.useState(data?data.mereFiancee:'');
+  const [mereJeuneFiancee, setmereJeuneFiancee] = React.useState(data?data.mereJeuneFiancee:'');
   const [dateNaissanceFiancee, setdateNaissanceFiancee] = React.useState(data?data.dateNaissanceFiancee:'');
   const [lieuNaissanceFiancee, setlieuNaissanceFiancee] = React.useState(data?data.lieuNaissanceFiancee:'');
   const [professionFiancee, setprofessionFiancee] = React.useState(data?data.professionFiancee:'');
@@ -95,6 +97,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
     prenomFiance,
     pereFiance,
     mereFiance,
+    mereJeuneFiance,
     dateNaissanceFiance,
     lieuNaissanceFiance,
     professionFiance,
@@ -114,6 +117,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
     prenomFiancee,
     pereFiancee,
     mereFiancee,
+    mereJeuneFiancee,
     dateNaissanceFiancee,
     lieuNaissanceFiancee,
     professionFiancee,
@@ -344,7 +348,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
                   value={prenomFiance} onChange={(e:any)=>setprenomFiance(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField
                   required
                   label="Fils de M"
@@ -354,7 +358,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
                   value={pereFiance} onChange={(e:any)=>setpereFiance(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField
                   required
                   label="et de Mme"
@@ -362,6 +366,15 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
                   margin="normal"
                   fullWidth
                   value={mereFiance} onChange={(e:any)=>setmereFiance(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="Nom Jeune Fille"
+                  className={classes.textField}
+                  margin="normal"
+                  fullWidth
+                  value={mereJeuneFiance} onChange={(e:any)=>setmereJeuneFiance(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -543,7 +556,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
                   value={prenomFiancee} onChange={(e:any)=>setprenomFiancee(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField
                   required
                   label="Fille de M"
@@ -553,7 +566,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
                   value={pereFiancee} onChange={(e:any)=>setpereFiancee(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField
                   required
                   label="et de Mme"
@@ -561,6 +574,15 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
                   margin="normal"
                   fullWidth
                   value={mereFiancee} onChange={(e:any)=>setmereFiancee(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="Nom Jeune Fille"
+                  className={classes.textField}
+                  margin="normal"
+                  fullWidth
+                  value={mereJeuneFiancee} onChange={(e:any)=>setmereJeuneFiancee(e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -762,7 +784,7 @@ Prêtre Célébrant : ${props.celebrant}
 *******************************************
 Fiancé  Nom : ${props.nomFiance} Prénom : ${props.prenomFiance}
 ======
-Fils de M : ${props.pereFiance} et de Mme : ${props.mereFiance}
+Fils de M : ${props.pereFiance} et de Mme : ${props.mereFiance} (${props.mereJeuneFiance})
 Né le : ${formatDate(props.dateNaissanceFiance)} à ${props.lieuNaissanceFiance}
 Domicile actuel : ${props.domicileFiance}
 Domicile futur du nouveau foyer : ${props.domicileFuturFiance}
@@ -775,7 +797,7 @@ Nb Enfants : ${(props.enfantsFiance !== 'non') ? props.nbEnfantsFiance:'0'}
 *******************************************
 Fiancée  Nom : ${props.nomFiancee} Prénom : ${props.prenomFiancee}
 ======
-Fille de M : ${props.pereFiancee} et de Mme : ${props.mereFiancee}
+Fille de M : ${props.pereFiancee} et de Mme : ${props.mereFiancee} (${props.mereJeuneFiancee})
 Née le : ${formatDate(props.dateNaissanceFiancee)} à ${props.lieuNaissanceFiancee}
 Domicile actuel : ${props.domicileFiancee}
 Domicile futur du nouveau foyer : ${props.domicileFuturFiancee}

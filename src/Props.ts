@@ -110,6 +110,7 @@ export interface MariageProps {
   prenomFiance: string;
   pereFiance: string;
   mereFiance: string;
+  mereJeuneFiance: string;
   dateNaissanceFiance: string;
   lieuNaissanceFiance: string;
   professionFiance: string;
@@ -129,6 +130,7 @@ export interface MariageProps {
   prenomFiancee: string;
   pereFiancee: string;
   mereFiancee: string;
+  mereJeuneFiancee: string;
   dateNaissanceFiancee: string;
   lieuNaissanceFiancee: string;
   professionFiancee: string;

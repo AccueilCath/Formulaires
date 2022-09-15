@@ -79,7 +79,7 @@ module.exports = (env, argv) => {
 
     config.devServer = {
       host: '0.0.0.0',
-      disableHostCheck: true
+      allowedHosts: 'all'
     }
 
   }

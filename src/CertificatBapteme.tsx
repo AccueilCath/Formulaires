@@ -281,6 +281,7 @@ const TextMaskCustom = (props: TextMaskCustomProps) => {
   const { inputRef, ...other } = props;
 
   return (
+    // @ts-ignore
     <MaskedInput
       {...other}
       ref={(ref: any) => {

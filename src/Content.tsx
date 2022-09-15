@@ -3,8 +3,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import { makeStyles, Theme } from '@material-ui/core';
+
 import { Bapteme } from './Bapteme';
 import { CertificatBapteme } from './CertificatBapteme';
 import { Obseques } from './Obseques';
@@ -35,7 +35,7 @@ const TabPanel: React.FC<TabPanelProps> = ({index, value, children}) => {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
     >
-      <Box p={3}>{children}</Box>
+      <div style={{padding:"3em"}}>{children}</div>
     </Typography>
   );
 }

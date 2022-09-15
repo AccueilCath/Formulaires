@@ -1,11 +1,12 @@
 {
-  "name": "FormulairesAccueil",
-  "version": "1.2.0",
+  "name": "formulaires-accueil",
+  "version": "1.3.0",
   "description": "Formulaires Accueil",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "del-cli dist && webpack --mode=production",
+    "build:dev": "del-cli dist && webpack --mode=development",
     "start:dev": "webpack serve --mode=development",
     "start": "node server.js"
   },
@@ -13,20 +14,20 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^14.14.31",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
+    "@types/node": "^16.11.59",
+    "@types/react": "^17.0.50",
+    "@types/react-dom": "^17.0.17",
     "@types/react-text-mask": "^5.4.6",
-    "copy-webpack-plugin": "^8.0.0",
-    "del-cli": "^3.0.1",
-    "dotenv-webpack": "^7.0.1",
+    "copy-webpack-plugin": "^11.0.0",
+    "del-cli": "^5.0.0",
+    "dotenv-webpack": "^8.0.1",
     "html-webpack-plugin": "^5.2.0",
-    "source-map-loader": "^2.0.1",
-    "ts-loader": "^8.0.17",
+    "source-map-loader": "^4.0.0",
+    "ts-loader": "^9.3.1",
     "typescript": "^4.2.3",
     "webpack": "^5.24.3",
     "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.11.0"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
@@ -38,5 +39,8 @@
     "react-dom": "^17.0.1",
     "react-text-mask": "^5.4.3",
     "ts-transformer-keys": "^0.4.3"
+  },
+  "resolutions": {
+    "@types/react": "17.0.50"
   }
 }
