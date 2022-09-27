@@ -35,7 +35,7 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
   const [dateDeces, setdateDeces] = React.useState(data?data.dateDeces:'');
   const [lieuDeces, setlieuDeces] = React.useState(data?data.lieuDeces:'');
   const [typeRite, settypeRite] = React.useState(data?data.typeRite:'');
-  const [lieuRite, setlieuRite] = React.useState(data?data.lieuRite:'Inhumation');
+  const [lieuRite, setlieuRite] = React.useState(data?data.lieuRite:'');
   const [adresseDefunt, setadresseDefunt] = React.useState(data?data.adresseDefunt:'');
   const [contact, setcontact] = React.useState(data?data.contact:'');
   const [parente, setparente] = React.useState(data?data.parente:'');
@@ -258,6 +258,7 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
                 <FormControl component="fieldset" className={classes.formControl}>
                   <RadioGroup aria-label="typeRite" value={typeRite} onChange={(e:any)=>settypeRite(e.target.value)} row >
                     <FormControlLabel value="Inhumation" control={<Radio />} label="Inhumation" />
+                    <div style={{width: "25vw"}}></div>
                     <FormControlLabel value="Crémation" control={<Radio />} label="Crémation" />
                   </RadioGroup>
                 </FormControl>
@@ -265,7 +266,7 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
               <Grid item xs={12}>
                 <TextField
                   required
-                  label="Lieu"
+                  label="Lieu d'inhumation"
                   className={classes.textField}
                   margin="normal"
                   value={lieuRite} onChange={(e:any)=>setlieuRite(e.target.value)}
