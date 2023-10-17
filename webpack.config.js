@@ -64,7 +64,9 @@ var config = {
             {from: 'static/*.css'}
         ]}),
         new HtmlWebpackPlugin({
-            template: 'static/index.html'
+            template: 'static/index.html',
+            favicon: false,
+            hash: true
         }),
         new Dotenv({
             systemvars: true

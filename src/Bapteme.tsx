@@ -96,10 +96,10 @@ export const Bapteme: React.FC<{data?:BaptemeProps}> = ({data}) => {
       <Grid
         container
         direction="row"
-        justify="center"
+        justifyContent="center"
         alignItems="center"
       >
-        <Grid container item justify="center">
+        <Grid container item justifyContent="center">
           <Paper className={classes.paper}>
             <Grid item xs={12}><Typography>Demande de baptême</Typography></Grid>
             <Grid item xs={12}>

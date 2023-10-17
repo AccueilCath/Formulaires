@@ -139,7 +139,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
       <Grid
         container
         direction="row"
-        justify="center"
+        justifyContent="center"
         alignItems="center"
       >
         <Grid item xs={12}>

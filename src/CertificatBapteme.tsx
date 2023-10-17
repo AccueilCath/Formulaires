@@ -56,10 +56,10 @@ export const CertificatBapteme:React.FC<{data?:CertificatBaptemeProps}> = ({data
       <Grid
         container
         direction="row"
-        justify="center"
+        justifyContent="center"
         alignItems="center"
       >
-        <Grid container item justify="center">
+        <Grid container item justifyContent="center">
           <Paper className={classes.paper}>
             <Grid item xs={12}><Typography>Demande de certificat de baptême</Typography></Grid>
             <Grid item xs={12}><Typography>Si c'est une demande en vue de marriage, renvoyer les personnes vers le prêtre qui fait leur préparation. C'est à lui de faire la demande sur un formulaire spécifique.</Typography></Grid>
