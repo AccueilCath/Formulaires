@@ -106,6 +106,7 @@ export interface MariageProps {
   egliseCelebration: string;
   dioceseCelebration: string;
   celebrant: string;
+  casuel: string;
   nomFiance: string;
   prenomFiance: string;
   pereFiance: string;

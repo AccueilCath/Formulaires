@@ -36,6 +36,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
   const [egliseCelebration, setegliseCelebration] = React.useState(data?data.egliseCelebration:'');
   const [dioceseCelebration, setdioceseCelebration] = React.useState(data?data.dioceseCelebration:'');
   const [celebrant, setcelebrant] = React.useState(data?data.celebrant:'');
+  const [casuel, setcasuel] = React.useState(data?data.casuel:'0');
   const [nomFiance, setnomFiance] = React.useState(data?data.nomFiance:'');
   const [prenomFiance, setprenomFiance] = React.useState(data?data.prenomFiance:'');
   const [pereFiance, setpereFiance] = React.useState(data?data.pereFiance:'');
@@ -93,6 +94,7 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
     egliseCelebration,
     dioceseCelebration,
     celebrant,
+    casuel,
     nomFiance,
     prenomFiance,
     pereFiance,
@@ -320,6 +322,22 @@ export const Mariage:React.FC<{data?: MariageProps}> = ({data}) => {
                   fullWidth
                   value={celebrant} onChange={(e:any)=>setcelebrant(e.target.value)}
                 />
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <Grid container>
+              <Grid item xs={2}><Typography variant="h5">Casuel</Typography></Grid>
+              <Grid item xs={12}>
+                <FormControl component="fieldset" className={classes.formControl}>
+                  <RadioGroup aria-label="casuel" value={casuel} onChange={(e:any)=>setcasuel(e.target.value)} row >
+                    <FormControlLabel value="300" control={<Radio />} label="300€ versés ce jour avec l'inscription" />
+                    <FormControlLabel value="0" control={<Radio />} label="Engagement à verser le casuel au plus tard 1 mois avant la célébration du mariage" />
+                  </RadioGroup>
+                  <div>Pour la préparation et la célébration de votre mariage, l'Eglise sollicite une participation financière de votre part d'un montant de 300€. Si le versement de cette somme vous pose une difficulté, n'hésitez pas à en parler au prêtre qui vous préparera au mariage.</div>
+                </FormControl>
               </Grid>
             </Grid>
           </Paper>
@@ -781,6 +799,12 @@ ${props.preparation} ${(props.preparation !== 'dans la paroisse') ? ('Eglise : '
 Célébration : ${props.celebration} Messe : ${props.messe}
 ${props.lieuCelebration} : Eglise : ${props.egliseCelebration} ${(props.lieuCelebration !== 'dans la paroisse') ? ('Diocèse : ' + props.dioceseCelebration):''}
 Prêtre Célébrant : ${props.celebrant}
+*******************************************
+CASUEL
+======
+Pour la préparation et la célébration de votre mariage, l'Eglise sollicite une participation financière de votre part d'un montant de 300€. Si le versement de cette somme vous pose une difficulté, n'hésitez pas à en parler au prêtre qui vous préparera au mariage.
+======
+${(props.casuel !== '300') ? "je m'engage à verser le casuel au plus tard 1 mois avant la célébration du mariage.":"300€ versés ce jour avec l'inscription."}
 *******************************************
 Fiancé  Nom : ${props.nomFiance} Prénom : ${props.prenomFiance}
 ======
