@@ -18,7 +18,7 @@ export const getToEmail = (emailBase: string, ...emailsAndNames: string[]) => {
         if (i+1 < emailsAndNames.length && emailsAndNames[i+1]) {
           emails.push('"'+emailsAndNames[i+1]+'" <'+emailsAndNames[i]+'>');
         } else {
-          emails.push(...emailsAndNames[i].split(";"));
+          emails.push(emailsAndNames[i]);
         }
       }
     }

@@ -196,7 +196,7 @@ export const CertificatBapteme:React.FC<{data?:CertificatBaptemeProps}> = ({data
                   value={tel} onChange={(e:any)=>settel(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   label="Adresse e-mail"
                   className={classes.textField}
@@ -205,7 +205,7 @@ export const CertificatBapteme:React.FC<{data?:CertificatBaptemeProps}> = ({data
                   fullWidth
                   value={email} onChange={(e:any)=>setemail(e.target.value)}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Grid container>
@@ -271,7 +271,6 @@ Eglise du Baptême : ${props.egliseBapteme}
 Date du Baptême : ${props.dateBapteme}
 Date de Naissance : ${formatDate(props.dateNaissance)}
 N° de téléphone: ${props.tel}
-Adresse e-mail : ${props.email}
 *******************************************
 ${props.livraison} ${props.adresseLivraison}
 `
