@@ -19,6 +19,10 @@ import { formatDate, getCCEmail, today, useStyles } from './utils';
 import { saveForm, localStorageAvailable, isSaved, getKey, removeForm } from './LocalStorage';
 import { CERT_BAPTEME_IDX, CertificatBaptemeProps } from './Props';
 
+const LIVRAISON_ACCUEIL = "viendra chercher le certificat dans une dizaine de jours à l'Accueil";
+const LIVRAISON_POSTE = "à envoyer uniquement par voie postale par Béatrice ou Anne";
+
+
 export const CertificatBapteme:React.FC<{data?:CertificatBaptemeProps}> = ({data}) => {
   const classes = useStyles();
   const [draftSaved, setDraftSaved] = React.useState(0);
@@ -34,7 +38,7 @@ export const CertificatBapteme:React.FC<{data?:CertificatBaptemeProps}> = ({data
   const [dateNaissance, setdateNaissance] = React.useState(data?data.dateNaissance:'');
   const [tel, settel] = React.useState(data?data.tel:'');
   const [email, setemail] = React.useState(data?data.email:'');
-  const [livraison, setlivraison] = React.useState(data?data.livraison:'viendra chercher dans une dizaine de jours');
+  const [livraison, setlivraison] = React.useState((data?.livraison || "").startsWith(LIVRAISON_POSTE[0]) ? LIVRAISON_POSTE:LIVRAISON_ACCUEIL);
   const [adresseLivraison, setadresseLivraison] = React.useState(data?data.adresseLivraison:'');
   const getProps = () => ({
     motif,
@@ -208,8 +212,8 @@ export const CertificatBapteme:React.FC<{data?:CertificatBaptemeProps}> = ({data
                     <Grid item xs={12}>
                       <FormControl component="fieldset" className={classes.formControl}>
                         <RadioGroup aria-label="livraison" value={livraison} onChange={(e:any)=>setlivraison(e.target.value)} >
-                          <FormControlLabel value="viendra chercher dans une dizaine de jours" control={<Radio />} label="viendra chercher dans une dizaine de jours" />
-                          <FormControlLabel value="à envoyer :" control={<Radio />} label="à envoyer :" />
+                          <FormControlLabel value={LIVRAISON_ACCUEIL} control={<Radio />} label={LIVRAISON_ACCUEIL} />
+                          <FormControlLabel value={LIVRAISON_POSTE} control={<Radio />} label={LIVRAISON_POSTE} />
                         </RadioGroup>
                       </FormControl>
                     </Grid>

@@ -25,6 +25,7 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
   const [enregistreur, setenregistreur] = React.useState(data?data.enregistreur:'');
   const [celebrant, setcelebrant] = React.useState(data?data.celebrant:'');
   const [emailCelebrant, setemailCelebrant] = React.useState(data?data.emailCelebrant:'');
+  const [emailSacristain, setemailSacristain] = React.useState(data?data.emailSacristain:'');
   const [dateCeremonie, setdateCeremonie] = React.useState(data?data.dateCeremonie:'');
   const [heureCeremonie, setheureCeremonie] = React.useState(data?data.heureCeremonie:'');
   const [lieuCeremonie, setlieuCeremonie] = React.useState(data?data.lieuCeremonie:'');
@@ -51,6 +52,7 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
     enregistreur,
     celebrant,
     emailCelebrant,
+    emailSacristain,
     dateCeremonie,
     heureCeremonie,
     lieuCeremonie,
@@ -104,9 +106,11 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
                     const celeb = findFirst(getCelebrants(), val => val.nom == value);
                     if (celeb) {
                       setemailCelebrant(getEmails(celeb.email));
+                      celeb.sacristain && setemailSacristain(getEmails(celeb.sacristain));
                     }
                   } else {
                     setemailCelebrant('');
+                    setemailSacristain('');
                   }
                 }}
                 renderInput={params => (
@@ -384,7 +388,7 @@ export const Obseques:React.FC<{data?: ObsequesProps}> = ({data}) => {
           }
           <MailTo 
             email={() => getToEmail(process.env.TO_EMAIL_OBSEQUES||process.env.TO_EMAIL||'', emailCelebrant, celebrant)} 
-            classement={getCCEmail(process.env.CC_EMAIL||'', 'Obseques')} 
+            classement={getCCEmail(process.env.CC_EMAIL||'', 'Obseques', emailSacristain)} 
             subject={() => getObsequesSubject(getProps())} 
             content={() => getObsequesEmail(getProps())} >Email la demande</MailTo>
         </Grid>

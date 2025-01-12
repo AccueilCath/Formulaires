@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import DraftsIcon from '@material-ui/icons/Drafts';
-import { FORM_LIBS, FormulaireProps, getCachedData } from './Props';
+import { BAPTEME_IDX, FORM_LIBS, FormulaireProps, getCachedData } from './Props';
 import { listFormKeys, KEY_SEPARATOR, removeForm } from './LocalStorage';
 import { URI_KEY, URI_FORM } from './utils';
 
@@ -49,7 +49,7 @@ export const DraftsList: React.FC<{}> = () => {
         </ListItemIcon>
         <ListItemText primary={getPrimary(key)} secondary={getSecondary(key)} />
         <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="edit" onClick={() => showForm(key)}>
+          <IconButton edge="end" aria-label="edit" disabled={Number(key.split(KEY_SEPARATOR, 2)[0]) <= BAPTEME_IDX} onClick={() => showForm(key)}>
             <EditIcon />
           </IconButton>
           <IconButton edge="end" aria-label="delete" onClick={() => {removeForm(key);setRefresh(refresh+1);}}>

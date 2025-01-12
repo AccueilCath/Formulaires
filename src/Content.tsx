@@ -42,7 +42,7 @@ const TabPanel: React.FC<TabPanelProps> = ({index, value, children}) => {
 
 export const Content: React.FC<{}> = () => {
   const classes = useStyles();
-  let keyFormId = 0;
+  let keyFormId = CERT_BAPTEME_IDX;
   let timeStamp = '' + new Date().getTime();
   let formData = undefined as FormulaireProps;
   const urlParams = new URLSearchParams(window.location.search);
@@ -78,16 +78,12 @@ export const Content: React.FC<{}> = () => {
       <input type="hidden" id="timestamp" value={timeStamp} />
       <AppBar position="static">
         <Tabs value={formId} onChange={handleChange} aria-label="content tabs">
-          <Tab label={FORM_LIBS[BAPTEME_IDX]} />
-          <Tab label={FORM_LIBS[CERT_BAPTEME_IDX]}  />
-          <Tab label={FORM_LIBS[OBSEQUES_IDX]} />
-          <Tab label={FORM_LIBS[MARIAGE_IDX]} />
-          <Tab label={FORM_LIBS[BROUILLONS_IDX]} />
+          <Tab label={FORM_LIBS[CERT_BAPTEME_IDX]} value={CERT_BAPTEME_IDX}  />
+          <Tab label={FORM_LIBS[OBSEQUES_IDX]} value={OBSEQUES_IDX} />
+          <Tab label={FORM_LIBS[MARIAGE_IDX]} value={MARIAGE_IDX} />
+          <Tab label={FORM_LIBS[BROUILLONS_IDX]} value={BROUILLONS_IDX} />
         </Tabs>
       </AppBar>
-      <TabPanel value={formId} index={BAPTEME_IDX}>
-        <Bapteme data={formData as BaptemeProps}/>
-      </TabPanel>
       <TabPanel value={formId} index={CERT_BAPTEME_IDX}>
         <CertificatBapteme data={formData as CertificatBaptemeProps}/>
       </TabPanel>

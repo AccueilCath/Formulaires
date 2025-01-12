@@ -18,7 +18,7 @@ export const getToEmail = (emailBase: string, ...emailsAndNames: string[]) => {
         if (i+1 < emailsAndNames.length && emailsAndNames[i+1]) {
           emails.push('"'+emailsAndNames[i+1]+'" <'+emailsAndNames[i]+'>');
         } else {
-          emails.push(emailsAndNames[i]);
+          emails.push(...emailsAndNames[i].split(";"));
         }
       }
     }
@@ -26,12 +26,12 @@ export const getToEmail = (emailBase: string, ...emailsAndNames: string[]) => {
   return emails.join(';');
 }
 
-export const getCCEmail = (email: string, type: string) => {
+export const getCCEmail = (email: string, type: string, ...emailsAndNames: string[]) => {
   const parts = email.split('@');
   if (parts.length > 0) {
     parts[0] += '+' + type;
   }
-  return parts.join('@');
+  return getToEmail(parts.join('@'), ...emailsAndNames);
 }
 
 const fillNumber =(val:number, len=2, fillChar='0'): string => val.toString().padStart(len, fillChar);
@@ -78,7 +78,7 @@ export const setInputValue = (id: string, value: string) => {
 }
 
 const LISTE_CELEBRANTS:Array<{nom: string, email: string}> = JSON.parse(process.env.LISTE_CELEBRANTS||'[]');
-export const getCelebrants = ():Array<{nom: string, email: string}> => {
+export const getCelebrants = ():Array<{nom: string, email: string, sacristain?: string}> => {
   return LISTE_CELEBRANTS;
 }
 

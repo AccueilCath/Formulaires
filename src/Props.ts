@@ -87,6 +87,7 @@ export interface ObsequesProps {
   email: string;
   pompesFunebres: string;
   telPompesFunebres: string;
+  emailSacristain: string;
 }
 
 export interface MariageProps {
