@@ -222,7 +222,7 @@ export const CertificatBapteme:React.FC<{data?:CertificatBaptemeProps}> = ({data
                         label="Adresse"
                         className={classes.textField}
                         margin="normal"
-                        disabled={livraison !== 'à envoyer :'}
+                        disabled={livraison !== LIVRAISON_POSTE}
                         value={adresseLivraison} onChange={(e:any)=>setadresseLivraison(e.target.value)}
                       />
                     </Grid>
