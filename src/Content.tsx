@@ -5,14 +5,15 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core';
 
-import { Bapteme } from './Bapteme';
+// import { Bapteme } from './Bapteme';
 import { CertificatBapteme } from './CertificatBapteme';
 import { Obseques } from './Obseques';
 import { Mariage} from './Mariage';
 import { DraftsList } from './DraftsList';
-import { BAPTEME_IDX, FORM_LIBS, CERT_BAPTEME_IDX, OBSEQUES_IDX, MARIAGE_IDX, BROUILLONS_IDX, BaptemeProps, CertificatBaptemeProps, ObsequesProps, MariageProps, FormulaireProps, getCachedData } from './Props';
+import { /*BAPTEME_IDX,*/ FORM_LIBS, CERT_BAPTEME_IDX, OBSEQUES_IDX, MARIAGE_IDX, BROUILLONS_IDX, /*BaptemeProps,*/ CertificatBaptemeProps, ObsequesProps, MariageProps, FormulaireProps, getCachedData, INTENTION_IDX, IntentionMesseProps } from './Props';
 import { getFormIdAndTimeStamp } from './LocalStorage';
 import { URI_KEY, URI_FORM } from './utils';
+import { IntentionMesse } from './IntentionMesse';
 
 interface TabPanelProps {
   index: number;
@@ -81,6 +82,7 @@ export const Content: React.FC<{}> = () => {
           <Tab label={FORM_LIBS[CERT_BAPTEME_IDX]} value={CERT_BAPTEME_IDX}  />
           <Tab label={FORM_LIBS[OBSEQUES_IDX]} value={OBSEQUES_IDX} />
           <Tab label={FORM_LIBS[MARIAGE_IDX]} value={MARIAGE_IDX} />
+          <Tab label={FORM_LIBS[INTENTION_IDX]} value={INTENTION_IDX} />
           <Tab label={FORM_LIBS[BROUILLONS_IDX]} value={BROUILLONS_IDX} />
         </Tabs>
       </AppBar>
@@ -92,6 +94,9 @@ export const Content: React.FC<{}> = () => {
       </TabPanel>
       <TabPanel value={formId} index={MARIAGE_IDX}>
         <Mariage data={formData as MariageProps} />
+      </TabPanel>
+      <TabPanel value={formId} index={INTENTION_IDX}>
+        <IntentionMesse data={formData as IntentionMesseProps} />
       </TabPanel>
       <TabPanel value={formId} index={BROUILLONS_IDX}>
         <DraftsList />

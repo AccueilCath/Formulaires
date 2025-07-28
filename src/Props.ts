@@ -6,7 +6,10 @@ export const CERT_BAPTEME_IDX = 1;
 export const OBSEQUES_IDX = 2;
 export const MARIAGE_IDX = 3;
 export const BROUILLONS_IDX = 4;
-export const FORM_LIBS = ['Baptême', 'Certificat de Baptême', 'Obsèques', 'Mariage', 'En Attente'];
+export const INTENTION_IDX = 5;
+export const FORM_LIBS = ['Baptême', 'Certificat de Baptême', 'Obsèques', 'Mariage', 'En Attente', 'Intention de Messe'];
+
+export const EGLISES = [ 'Cathédrale Saint Louis', "Église Sainte Jeanne d'Arc", "Église Sacré-Cœur", "Église Notre Dame", "Église Saint Sauveur", "Chapelle Saint-Louis", "Église Saint-Nicolas", "Chapelle et Centre Jean-Baptiste Souzy"]
 
 export interface BaptemeProps {
   dateBapteme: string;
@@ -150,7 +153,20 @@ export interface MariageProps {
   nbEnfantsFiancee: string;
 }
 
-export type FormulaireProps = BaptemeProps|CertificatBaptemeProps|ObsequesProps|MariageProps|undefined;
+export interface IntentionMesseProps {
+  dateDemande: string;
+  enregistreur: string;
+  celebrant: string;
+  emailCelebrant: string;
+  eglise: string;
+  dateIntention: string;
+  heureIntention: string;
+  nom: string;
+  decede: string;
+}
+
+
+export type FormulaireProps = BaptemeProps|CertificatBaptemeProps|ObsequesProps|MariageProps|IntentionMesseProps|undefined;
 
 export const getCachedData = (val: string): FormulaireProps => {
   const parts = val.split(KEY_SEPARATOR);
@@ -165,6 +181,8 @@ export const getCachedData = (val: string): FormulaireProps => {
         return loadForm<ObsequesProps>(val);
       case MARIAGE_IDX:
         return loadForm<MariageProps>(val);
+      case INTENTION_IDX:
+        return loadForm<IntentionMesseProps>(val);
     }
   }
   return undefined;
