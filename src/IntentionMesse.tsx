@@ -12,7 +12,7 @@ import Button from "@material-ui/core/Button";
 import DraftsIcon from "@material-ui/icons/Drafts";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { MailTo } from "./mailto";
-import { findFirst, formatDate, getCCEmail, getCelebrants, getEmails, getToEmail, today, useStyles } from "./utils";
+import { formatDate, getCCEmail, getToEmail, today, useStyles } from "./utils";
 import { saveForm, localStorageAvailable, isSaved, getKey, removeForm } from "./LocalStorage";
 import { EGLISES, INTENTION_IDX, IntentionMesseProps } from "./Props";
 import { Autocomplete } from "@material-ui/lab";
@@ -21,8 +21,6 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
   const classes = useStyles();
   const [draftSaved, setDraftSaved] = React.useState(0);
 
-  const [celebrant, setcelebrant] = React.useState(data ? data.celebrant : "");
-  const [emailCelebrant, setemailCelebrant] = React.useState(data ? data.emailCelebrant : "");
   const [dateDemande, setdateDemande] = React.useState(data ? data.dateDemande : today());
   const [enregistreur, setenregistreur] = React.useState(data ? data.enregistreur : "");
   const [eglise, seteglise] = React.useState(data ? data.eglise : "");
@@ -31,8 +29,6 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
   const [heureIntention, setheureIntention] = React.useState(data ? data.heureIntention : "");
   const [decede, setdecede] = React.useState(data ? data.decede : "Décédé");
   const getProps = () => ({
-    celebrant,
-    emailCelebrant,
     dateDemande,
     enregistreur,
     nom,
@@ -46,43 +42,6 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
       <Grid container direction="row" justifyContent="center" alignItems="center">
         <Grid item xs={12}>
           <Typography>Demande d'intention de messe</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Autocomplete
-            freeSolo
-            value={celebrant}
-            options={getCelebrants().map((celeb) => celeb.nom)}
-            onInputChange={(event: object, value: string, reason: string) => {
-              setcelebrant(value);
-              if (reason == "reset") {
-                const celeb = findFirst(getCelebrants(), (val) => val.nom == value);
-                if (celeb) {
-                  setemailCelebrant(getEmails(celeb.email));
-                }
-              } else {
-                setemailCelebrant("");
-              }
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Célébrant"
-                margin="normal"
-                className={classes.textField}
-                required
-                fullWidth
-              />
-            )}
-          />
-          <TextField
-            required
-            label="Email"
-            className={classes.textField}
-            margin="normal"
-            fullWidth
-            value={emailCelebrant}
-            onChange={(e: any) => setemailCelebrant(e.target.value)}
-          />
         </Grid>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
@@ -216,7 +175,7 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
             </Button>
           )}
           <MailTo
-            email={() => getToEmail(process.env.TO_EMAIL || "", emailCelebrant, celebrant)}
+            email={() => getToEmail(process.env.TO_EMAIL || "")}
             classement={getCCEmail(process.env.CC_EMAIL || "", "IntentionMesse")}
             subject="Intention de Messe"
             content={() => getIntentionMesseEmail(getProps())}

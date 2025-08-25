@@ -156,8 +156,6 @@ export interface MariageProps {
 export interface IntentionMesseProps {
   dateDemande: string;
   enregistreur: string;
-  celebrant: string;
-  emailCelebrant: string;
   eglise: string;
   dateIntention: string;
   heureIntention: string;
