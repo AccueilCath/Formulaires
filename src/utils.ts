@@ -28,7 +28,7 @@ export const getToEmail = (emailBase: string, ...emailsAndNames: string[]) => {
 
 export const getCCEmail = (email: string, type: string, ...emailsAndNames: string[]) => {
   const parts = email.split('@');
-  if (parts.length > 0) {
+  if (parts.length > 1) {
     parts[0] += '+' + type;
   }
   return getToEmail(parts.join('@'), ...emailsAndNames);

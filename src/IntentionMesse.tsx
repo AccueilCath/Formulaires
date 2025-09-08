@@ -175,8 +175,8 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
             </Button>
           )}
           <MailTo
-            email={() => getToEmail(process.env.TO_EMAIL || "")}
-            classement={getCCEmail(process.env.CC_EMAIL || "", "IntentionMesse")}
+            email={() => getToEmail("")}
+            classement={getCCEmail(process.env.CC_EMAIL || "", "IntentionMesse", process.env.CC_INTENTION || "")}
             subject="Intention de Messe"
             content={() => getIntentionMesseEmail(getProps())}
           >
