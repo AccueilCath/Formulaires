@@ -28,6 +28,7 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
   const [dateIntention, setdateIntention] = React.useState(data ? data.dateIntention : "");
   const [heureIntention, setheureIntention] = React.useState(data ? data.heureIntention : "");
   const [decede, setdecede] = React.useState(data ? data.decede : "Décédé");
+  const [payeAccueil, setpayeAccueil] = React.useState(data ? data.payeAccueil : "Payé à l'Accueil");
   const getProps = () => ({
     dateDemande,
     enregistreur,
@@ -36,6 +37,7 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
     dateIntention,
     heureIntention,
     decede,
+    payeAccueil,
   });
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -109,6 +111,15 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
                   <RadioGroup aria-label="Décédé" value={decede} onChange={(e: any) => setdecede(e.target.value)} row>
                     <FormControlLabel value="Décédé" control={<Radio />} label="Oui" />
                     <FormControlLabel value="Non Décédé" control={<Radio />} label="Non" />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl component="fieldset" className={classes.formControl}>
+                  <FormLabel component="legend">Payé à l'Accueil</FormLabel>
+                  <RadioGroup aria-label="Payé à l'Accueil" value={payeAccueil} onChange={(e: any) => setpayeAccueil(e.target.value)} row>
+                    <FormControlLabel value="Payé à l'Accueil" control={<Radio />} label="Oui" />
+                    <FormControlLabel value="Non Payé à l'Accueil" control={<Radio />} label="Non" />
                   </RadioGroup>
                 </FormControl>
               </Grid>
@@ -197,6 +208,7 @@ En l'église : ${props.eglise}
 le : ${props.dateIntention} à ${props.heureIntention}
 Pour : ${props.nom}
 ${props.decede}
+${props.payeAccueil}
 
 Fraternellement
 L'Accueil de la paroisse du Christ-Sauveur

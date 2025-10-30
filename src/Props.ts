@@ -161,6 +161,7 @@ export interface IntentionMesseProps {
   heureIntention: string;
   nom: string;
   decede: string;
+  payeAccueil: string;
 }
 
 
