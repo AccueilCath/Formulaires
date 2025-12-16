@@ -1195,7 +1195,7 @@ export const Mariage: React.FC<{ data?: MariageProps }> = ({ data }) => {
             Email la demande
           </MailTo>
           <MailTo
-            email={emailFiance || ""}
+            email={emailFiance + " " + emailFiancee || ""}
             classement={getCCEmail(process.env.CC_EMAIL || "", "Mariage")}
             subject="Confirmation demande de mariage"
             content={() => getConfirmedMariageEmail()}
