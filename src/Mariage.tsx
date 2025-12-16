@@ -1208,12 +1208,7 @@ export const Mariage: React.FC<{ data?: MariageProps }> = ({ data }) => {
   );
 };
 
-const baseUrl =
-  window.location.hostname === "localhost"
-    ? "http://localhost:3000"
-    : "https://accueilcath.github.io/Formulaires";
-
-const pdfUrl = `${baseUrl}/documents/wedding_flyer.pdf`;
+const pdfUrl = `https://drive.google.com/file/d/1iqHwL5_2UXiMWWOe9i6SKgCZnhTENI8U/view?usp=sharing`;
 
 const getConfirmedMariageEmail = (): string => {
   return `Bonjour,
