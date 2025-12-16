@@ -34,6 +34,8 @@ export const MailTo: React.FC<MailToProps> = ({
     const button = evt.currentTarget as HTMLAnchorElement;
     button.target = "Mail";
     const dest = getEmails(typeof email == "string" ? email : email());
+    console.log(dest, "dest");
+
     button.href = `mailto:${encodeURIComponent(
       dest
     )}?subject=${encodeURIComponent(
