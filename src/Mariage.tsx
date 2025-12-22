@@ -1195,8 +1195,11 @@ export const Mariage: React.FC<{ data?: MariageProps }> = ({ data }) => {
             Email la demande
           </MailTo>
           <MailTo
-            email={emailFiance + " " + emailFiancee || ""}
-            classement={getCCEmail(process.env.CC_EMAIL || "", "Mariage")}
+            email={emailFiance + ";" + emailFiancee || ""}
+            classement={getCCEmail(
+              process.env.CC_EMAIL + ";" + process.env.TO_EMAIL_MARIAGE || "",
+              "Mariage"
+            )}
             subject="Confirmation demande de mariage"
             content={() => getConfirmedMariageEmail()}
           >
@@ -1230,6 +1233,10 @@ préparateur et célébrant.
 
 Je vous rappelle que vous devez vous acquitter, au plus tard un mois avant la date de votre mariage,
 de la somme de 300 € par chèque libellé à "Paroisse du Christ-Sauveur", adressé à :
+Anne Illionet, 
+17 rue Chaudrier, 
+17000, 
+La Rochelle
 
 Enfin vous devez rapidement vous inscrire à la session d'une journée de préparation de votre mariage. Cliquez sur ce lien:
 ${pdfUrl}

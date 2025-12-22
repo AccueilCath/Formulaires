@@ -13,26 +13,53 @@ import DraftsIcon from "@material-ui/icons/Drafts";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { MailTo } from "./mailto";
 import { formatDate, getCCEmail, getToEmail, today, useStyles } from "./utils";
-import { saveForm, localStorageAvailable, isSaved, getKey, removeForm } from "./LocalStorage";
+import {
+  saveForm,
+  localStorageAvailable,
+  isSaved,
+  getKey,
+  removeForm,
+} from "./LocalStorage";
 import { EGLISES, INTENTION_IDX, IntentionMesseProps } from "./Props";
 import { Autocomplete } from "@material-ui/lab";
 
-export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data }) => {
+export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({
+  data,
+}) => {
   const classes = useStyles();
   const [draftSaved, setDraftSaved] = React.useState(0);
 
-  const [dateDemande, setdateDemande] = React.useState(data ? data.dateDemande : today());
-  const [enregistreur, setenregistreur] = React.useState(data ? data.enregistreur : "");
+  const [dateDemande, setdateDemande] = React.useState(
+    data ? data.dateDemande : today()
+  );
+  const [enregistreur, setenregistreur] = React.useState(
+    data ? data.enregistreur : ""
+  );
   const [eglise, seteglise] = React.useState(data ? data.eglise : "");
   const [nom, setnom] = React.useState(data ? data.nom : "");
-  const [dateIntention, setdateIntention] = React.useState(data ? data.dateIntention : "");
-  const [heureIntention, setheureIntention] = React.useState(data ? data.heureIntention : "");
+  const [nomDemandeur, setNomDemandeur] = React.useState(
+    data ? data.nomDemandeur : ""
+  );
+  const [phoneNumber, setPhoneNumber] = React.useState(
+    data ? data.phoneNumber : ""
+  );
+
+  const [dateIntention, setdateIntention] = React.useState(
+    data ? data.dateIntention : ""
+  );
+  const [heureIntention, setheureIntention] = React.useState(
+    data ? data.heureIntention : ""
+  );
   const [decede, setdecede] = React.useState(data ? data.decede : "Décédé");
-  const [payeAccueil, setpayeAccueil] = React.useState(data ? data.payeAccueil : "Payé à l'Accueil");
+  const [payeAccueil, setpayeAccueil] = React.useState(
+    data ? data.payeAccueil : "Payé à l'Accueil"
+  );
   const getProps = () => ({
     dateDemande,
     enregistreur,
     nom,
+    phoneNumber,
+    nomDemandeur,
     eglise,
     dateIntention,
     heureIntention,
@@ -41,7 +68,12 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
   });
   return (
     <form className={classes.container} noValidate autoComplete="off">
-      <Grid container direction="row" justifyContent="center" alignItems="center">
+      <Grid
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Grid item xs={12}>
           <Typography>Demande d'intention de messe</Typography>
         </Grid>
@@ -49,11 +81,37 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
           <Paper className={classes.paper}>
             <Grid container>
               <Grid item xs={12}>
+                <TextField
+                  required
+                  label="Nom du demandeur"
+                  className={classes.textField}
+                  margin="normal"
+                  fullWidth
+                  value={nomDemandeur}
+                  onChange={(e: any) => setNomDemandeur(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  label="Téléphone du demandeur"
+                  className={classes.textField}
+                  margin="normal"
+                  fullWidth
+                  value={phoneNumber}
+                  onChange={(e: any) => setPhoneNumber(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
                 <Autocomplete
                   freeSolo
                   value={eglise}
                   options={EGLISES}
-                  onInputChange={(event: object, value: string, reason: string) => seteglise(value)}
+                  onInputChange={(
+                    event: object,
+                    value: string,
+                    reason: string
+                  ) => seteglise(value)}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -106,20 +164,52 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControl component="fieldset" className={classes.formControl}>
+                <FormControl
+                  component="fieldset"
+                  className={classes.formControl}
+                >
                   <FormLabel component="legend">Décédé</FormLabel>
-                  <RadioGroup aria-label="Décédé" value={decede} onChange={(e: any) => setdecede(e.target.value)} row>
-                    <FormControlLabel value="Décédé" control={<Radio />} label="Oui" />
-                    <FormControlLabel value="Non Décédé" control={<Radio />} label="Non" />
+                  <RadioGroup
+                    aria-label="Décédé"
+                    value={decede}
+                    onChange={(e: any) => setdecede(e.target.value)}
+                    row
+                  >
+                    <FormControlLabel
+                      value="Décédé"
+                      control={<Radio />}
+                      label="Oui"
+                    />
+                    <FormControlLabel
+                      value="Non Décédé"
+                      control={<Radio />}
+                      label="Non"
+                    />
                   </RadioGroup>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl component="fieldset" className={classes.formControl}>
+                <FormControl
+                  component="fieldset"
+                  className={classes.formControl}
+                >
                   <FormLabel component="legend">Payé à l'Accueil</FormLabel>
-                  <RadioGroup aria-label="Payé à l'Accueil" value={payeAccueil} onChange={(e: any) => setpayeAccueil(e.target.value)} row>
-                    <FormControlLabel value="Payé à l'Accueil" control={<Radio />} label="Oui" />
-                    <FormControlLabel value="Non Payé à l'Accueil" control={<Radio />} label="Non" />
+                  <RadioGroup
+                    aria-label="Payé à l'Accueil"
+                    value={payeAccueil}
+                    onChange={(e: any) => setpayeAccueil(e.target.value)}
+                    row
+                  >
+                    <FormControlLabel
+                      value="Payé à l'Accueil"
+                      control={<Radio />}
+                      label="Oui"
+                    />
+                    <FormControlLabel
+                      value="Non Payé à l'Accueil"
+                      control={<Radio />}
+                      label="Non"
+                    />
                   </RadioGroup>
                 </FormControl>
               </Grid>
@@ -187,7 +277,11 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
           )}
           <MailTo
             email={() => getToEmail("")}
-            classement={getCCEmail(process.env.CC_EMAIL || "", "IntentionMesse", process.env.CC_INTENTION || "")}
+            classement={getCCEmail(
+              process.env.CC_EMAIL || "",
+              "IntentionMesse",
+              process.env.CC_INTENTION || ""
+            )}
             subject="Intention de Messe"
             content={() => getIntentionMesseEmail(getProps())}
           >
@@ -200,10 +294,14 @@ export const IntentionMesse: React.FC<{ data?: IntentionMesseProps }> = ({ data 
 };
 
 const getIntentionMesseEmail = (props: IntentionMesseProps): string => {
-  return `Demande faite le : ${formatDate(props.dateDemande)} par : ${props.enregistreur}
+  return `Demande faite le : ${formatDate(props.dateDemande)} par : ${
+    props.enregistreur
+  }
 
   Intention de messe
 *******************************************
+Nom du demandeur: ${props.nomDemandeur}
+Numéro de téléphone du demandeur: ${props.phoneNumber}
 En l'église : ${props.eglise}
 le : ${props.dateIntention} à ${props.heureIntention}
 Pour : ${props.nom}
