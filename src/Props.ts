@@ -1,5 +1,5 @@
-import { KEY_SEPARATOR, loadForm } from './LocalStorage';
-import { setInputValue } from './utils';
+import { KEY_SEPARATOR, loadForm } from "./LocalStorage";
+import { setInputValue } from "./utils";
 
 export const BAPTEME_IDX = 0;
 export const CERT_BAPTEME_IDX = 1;
@@ -7,14 +7,30 @@ export const OBSEQUES_IDX = 2;
 export const MARIAGE_IDX = 3;
 export const BROUILLONS_IDX = 4;
 export const INTENTION_IDX = 5;
-export const FORM_LIBS = ['Baptême', 'Certificat de Baptême', 'Obsèques', 'Mariage', 'En Attente', 'Intention de Messe'];
+export const FORM_LIBS = [
+  "Baptême",
+  "Certificat de Baptême",
+  "Obsèques",
+  "Mariage",
+  "En Attente",
+  "Intention de Messe",
+];
 
-export const EGLISES = [ 'Cathédrale Saint Louis', "Église Sainte Jeanne d'Arc", "Église Sacré-Cœur", "Église Notre Dame", "Église Saint Sauveur", "Chapelle Saint-Louis", "Église Saint-Nicolas", "Chapelle et Centre Jean-Baptiste Souzy"]
+export const EGLISES = [
+  "Cathédrale Saint Louis",
+  "Église Sainte Jeanne d'Arc",
+  "Église Sacré-Cœur",
+  "Église Notre Dame",
+  "Église Saint Sauveur",
+  "Chapelle Saint-Louis",
+  "Église Saint-Nicolas",
+  "Chapelle et Centre Jean-Baptiste Souzy",
+];
 
 export interface BaptemeProps {
   dateBapteme: string;
-//  lieu: string;
-//  lieuExterieur: string;
+  //  lieu: string;
+  //  lieuExterieur: string;
   dateDemande: string;
   enregistreur: string;
   enfant: string;
@@ -154,6 +170,7 @@ export interface MariageProps {
 }
 
 export interface IntentionMesseProps {
+  nomDemandeur: string;
   dateDemande: string;
   enregistreur: string;
   eglise: string;
@@ -162,15 +179,21 @@ export interface IntentionMesseProps {
   nom: string;
   decede: string;
   payeAccueil: string;
+  phoneNumber: string;
 }
 
-
-export type FormulaireProps = BaptemeProps|CertificatBaptemeProps|ObsequesProps|MariageProps|IntentionMesseProps|undefined;
+export type FormulaireProps =
+  | BaptemeProps
+  | CertificatBaptemeProps
+  | ObsequesProps
+  | MariageProps
+  | IntentionMesseProps
+  | undefined;
 
 export const getCachedData = (val: string): FormulaireProps => {
   const parts = val.split(KEY_SEPARATOR);
   if (parts.length > 2) {
-    setInputValue('timestamp', parts[2]);
+    setInputValue("timestamp", parts[2]);
     switch (parseInt(parts[1])) {
       case BAPTEME_IDX:
         return loadForm<BaptemeProps>(val);
@@ -185,4 +208,4 @@ export const getCachedData = (val: string): FormulaireProps => {
     }
   }
   return undefined;
-}
+};
