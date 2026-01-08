@@ -1222,7 +1222,7 @@ Vous avez sollicité l'Accueil de la paroisse du Christ-Sauveur qui a enregistr�
 Je vous confirme qu'elle a été transmise à la Responsable des mariages, Madame Anne Illionnet.
 Désormais, elle est votre unique interlocutrice et vous pouvez la contacter :
 - par mail : anneillionnet@gmail.com
-- par téléphone : 06 14 51 31 50
+- par téléphone : 06 14 56 31 50
 
 Si votre dossier est incomplet, je vous remercie de lui transmettre dans les meilleurs délais les
 informations manquantes afin qu'il soit étudié.
@@ -1233,7 +1233,7 @@ préparateur et célébrant.
 
 Je vous rappelle que vous devez vous acquitter, au plus tard un mois avant la date de votre mariage,
 de la somme de 300 € par chèque libellé à "Paroisse du Christ-Sauveur", adressé à :
-Anne Illionet, 
+Anne Illionnet, 
 17 rue Chaudrier, 
 17000, 
 La Rochelle
