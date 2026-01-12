@@ -1286,6 +1286,7 @@ Fils de M : ${props.pereFiance} et de Mme : ${props.mereFiance} (${
   })
 Né le : ${formatDate(props.dateNaissanceFiance)} à ${props.lieuNaissanceFiance}
 Domicile actuel : ${props.domicileFiance}
+Profession: ${props.professionFiance}
 Domicile futur du nouveau foyer : ${props.domicileFuturFiance}
 Tel fixe : ${props.telFiance} Tel portable : ${props.mobileFiance}
 Courriel : ${props.emailFiance}
@@ -1305,6 +1306,7 @@ Née le : ${formatDate(props.dateNaissanceFiancee)} à ${
     props.lieuNaissanceFiancee
   }
 Domicile actuel : ${props.domicileFiancee}
+Profession: ${props.professionFiancee}
 Domicile futur du nouveau foyer : ${props.domicileFuturFiancee}
 Tel fixe : ${props.telFiancee} Tel portable : ${props.mobileFiancee}
 Courriel : ${props.emailFiancee}
